@@ -50,20 +50,31 @@
                 android:textColor="#000" />
 
             <EditText
+                android:id="@+id/parentFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Parent Name"
+                android:hint="Parent First Name"
                 android:background="@android:drawable/edit_text" />
 
             <EditText
+                android:id="@+id/parentLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Parent Last Name"
+                android:background="@android:drawable/edit_text" />
+
+            <EditText
+                android:id="@+id/mobileNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Mobile Number"
                 android:inputType="phone"
                 android:layout_marginTop="4dp"
-                android:background="@android:drawable/edit_text" />
+                android:background="@android:drawable/edit_text"
+                android:maxLength="10"/>
 
             <EditText
+                android:id="@+id/homeAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Home Address"
@@ -81,12 +92,21 @@
                 android:textColor="#000" />
 
             <EditText
+                android:id="@+id/ChildFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Child's Full Name"
+                android:hint="Child's First Name"
                 android:background="@android:drawable/edit_text" />
 
             <EditText
+            android:id="@+id/ChildLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Child's Last Name"
+            android:background="@android:drawable/edit_text" />
+
+            <EditText
+                android:id="@+id/DOB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Date of Birth"
@@ -112,9 +132,10 @@
                 android:textColor="#000" />
 
             <EditText
+                android:id="@+id/Comment"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:hint=""
+                android:hint="Add Comment"
                 android:gravity="top|start"
                 android:background="@android:drawable/edit_text"
                 android:inputType="textMultiLine" />
@@ -130,6 +151,7 @@
                 android:textColor="#000" />
 
             <EditText
+                android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="parent@example.com"
@@ -148,6 +170,7 @@
                 android:textColor="#000" />
 
             <EditText
+                android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="************"
@@ -157,6 +180,7 @@
 
             <!-- Sign Up Button -->
             <Button
+                android:id="@+id/signUpButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sign up"

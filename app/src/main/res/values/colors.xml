@@ -6,4 +6,9 @@
     <color name="primary_yellow">#FFD600</color>
     <color name="dark_grey">#555555</color>
     <color name="background_light">#FFF5E6</color>
+    <color name="colorPrimary">#FFD600</color> <!-- Yellow -->
+    <color name="colorPrimaryDark">#FBC02D</color>
+    <color name="colorAccent">#2962FF</color> <!-- Blue -->
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

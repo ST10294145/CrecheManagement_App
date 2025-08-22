@@ -1,0 +1,90 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Section: Child Details -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Child Details"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvChildName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name: "
+            android:textSize="16sp"
+            android:paddingVertical="4dp"/>
+
+        <TextView
+            android:id="@+id/tvDOB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DOB: "
+            android:textSize="16sp"
+            android:paddingVertical="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAllergies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Allergies: "
+            android:textSize="16sp"
+            android:paddingVertical="4dp"/>
+
+        <TextView
+            android:id="@+id/tvMedicalInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Medical Info: "
+            android:textSize="16sp"
+            android:paddingVertical="4dp"/>
+
+        <!-- Section: Assigned Staff -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assigned Staff"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvStaffName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Staff Name: "
+            android:textSize="16sp"
+            android:paddingVertical="4dp"/>
+
+        <!-- Section: Parent -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Parent"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvParentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Parent Name: "
+            android:textSize="16sp"
+            android:paddingVertical="4dp"/>
+
+    </LinearLayout>
+</ScrollView>

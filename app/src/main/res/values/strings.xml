@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">CrecheManagement_App</string>
+
+    <string-array name="user_roles">
+        <item>Parent</item>
+        <item>Staff</item>
+        <item>Admin</item>
+    </string-array>
+
 </resources>

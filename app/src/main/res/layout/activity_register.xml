@@ -30,117 +30,161 @@
                 android:src="@drawable/logo"
                 android:layout_gravity="center" />
 
-            <!-- Subtitle -->
+            <!-- Role Selector -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Join us to stay connected"
-                android:textColor="#0097A7"
-                android:textSize="14sp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp" />
-
-            <!-- Parent Information -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Parent Information"
+                android:text="Register as:"
                 android:textStyle="bold"
-                android:layout_marginBottom="8dp"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:layout_marginTop="8dp"/>
 
-            <EditText
-                android:id="@+id/parentFirstName"
+            <Spinner
+                android:id="@+id/roleSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Parent First Name"
-                android:background="@android:drawable/edit_text" />
+                android:layout_marginBottom="16dp"
+                android:entries="@array/user_roles"
+                android:minHeight="48dp" />
 
-            <EditText
-                android:id="@+id/parentLastName"
+            <!-- Parent Section -->
+            <LinearLayout
+                android:id="@+id/parentSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Parent Last Name"
-                android:background="@android:drawable/edit_text" />
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <EditText
-                android:id="@+id/mobileNumber"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Parent Information"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="#000" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Parent Name"
+                    android:background="@android:drawable/edit_text" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mobile Number"
+                    android:inputType="phone"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/edit_text" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Home Address"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/edit_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Child Information"
+                    android:textStyle="bold"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="#000" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Child's Full Name"
+                    android:background="@android:drawable/edit_text" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Date of Birth"
+                    android:inputType="date"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/edit_text" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Gender"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/edit_text" />
+            </LinearLayout>
+
+            <!-- Staff Section -->
+            <LinearLayout
+                android:id="@+id/staffSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mobile Number"
-                android:inputType="phone"
-                android:layout_marginTop="4dp"
-                android:background="@android:drawable/edit_text"
-                android:maxLength="10"/>
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <EditText
-                android:id="@+id/homeAddress"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Staff Information"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="#000" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Full Name"
+                    android:background="@android:drawable/edit_text" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Role"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/edit_text" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Phone Number"
+                    android:inputType="phone"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/edit_text" />
+            </LinearLayout>
+
+            <!-- Admin Section -->
+            <LinearLayout
+                android:id="@+id/adminSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Home Address"
-                android:layout_marginTop="4dp"
-                android:background="@android:drawable/edit_text" />
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <!-- Child Information -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Child Information"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="#000" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Admin Information"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="#000" />
 
-            <EditText
-                android:id="@+id/ChildFirstName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Child's First Name"
-                android:background="@android:drawable/edit_text" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Full Name"
+                    android:background="@android:drawable/edit_text" />
 
-            <EditText
-            android:id="@+id/ChildLastName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Child's Last Name"
-            android:background="@android:drawable/edit_text" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Phone Number"
+                    android:inputType="phone"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/edit_text" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/DOB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Date of Birth"
-                android:inputType="date"
-                android:layout_marginTop="4dp"
-                android:background="@android:drawable/edit_text" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Gender"
-                android:layout_marginTop="4dp"
-                android:background="@android:drawable/edit_text" />
-
-            <!-- Comment -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Comment"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="#000" />
-
-            <EditText
-                android:id="@+id/Comment"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:hint="Add Comment"
-                android:gravity="top|start"
-                android:background="@android:drawable/edit_text"
-                android:inputType="textMultiLine" />
-
-            <!-- Email -->
+            <!-- Common Fields (Email & Password for all roles) -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -154,16 +198,15 @@
                 android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="parent@example.com"
+                android:hint="example@email.com"
                 android:inputType="textEmailAddress"
                 android:drawableEnd="@android:drawable/ic_dialog_email"
                 android:background="@android:drawable/edit_text" />
 
-            <!-- Password -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create a password *"
+                android:text="Password *"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="4dp"
@@ -173,7 +216,7 @@
                 android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="************"
+                android:hint="********"
                 android:inputType="textPassword"
                 android:drawableEnd="@android:drawable/ic_lock_lock"
                 android:background="@android:drawable/edit_text" />

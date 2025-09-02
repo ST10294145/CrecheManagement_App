@@ -6,21 +6,24 @@
 
     <EditText
         android:id="@+id/etAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="Amount"
         android:inputType="numberDecimal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:minHeight="48dp" />
 
     <Spinner
         android:id="@+id/spinnerType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/etDescription"
-        android:hint="Description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:minHeight="48dp" />
 
     <!--  <com.stripe.android.view.CardInputWidget
          android:id="@+id/cardInputWidget"

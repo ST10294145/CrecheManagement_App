@@ -70,10 +70,10 @@ android:id="@+id/main">
 
     <!-- Sign In Button -->
     <Button
-        android:id="@+id/signInButton"
+        android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign In"
+        android:text="Login"
         android:backgroundTint="#FBB431"
         android:textColor="#FFFFFF" />
 

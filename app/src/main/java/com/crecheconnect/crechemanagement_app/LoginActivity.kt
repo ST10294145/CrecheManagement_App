@@ -2,9 +2,11 @@ package com.crecheconnect.crechemanagement_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +24,10 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
     private lateinit var loginButton: Button
+    private lateinit var togglePassword: ImageView
+
+    // State to track password visibility
+    private var isPasswordVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
         emailInput = findViewById(R.id.emailInput)
         passwordInput = findViewById(R.id.passwordInput)
         loginButton = findViewById(R.id.loginButton)
+        togglePassword = findViewById(R.id.togglePassword)
 
         // Handle login button click
         loginButton.setOnClickListener {
@@ -47,6 +54,23 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Handle eye icon click to toggle password visibility
+        togglePassword.setOnClickListener {
+            if (isPasswordVisible) {
+                // Hide password
+                passwordInput.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                isPasswordVisible = false
+            } else {
+                // Show password
+                passwordInput.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                isPasswordVisible = true
+            }
+            // Keep cursor at the end of the text
+            passwordInput.setSelection(passwordInput.text.length)
         }
     }
 

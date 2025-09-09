@@ -36,6 +36,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AttendanceActivity" />
+        <activity android:name=".EventsParentActivity" />
+        <activity android:name=".MessagesActivity" />
+
     </application>
 
 </manifest>

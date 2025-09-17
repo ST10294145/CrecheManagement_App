@@ -19,6 +19,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <EditText
+        android:id="@+id/inputReceiver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Receiver UID (or 'all')"
+        android:minHeight="48dp" />
+
     <Button
         android:id="@+id/btnSend"
         android:text="Send"

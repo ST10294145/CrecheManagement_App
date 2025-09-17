@@ -77,6 +77,7 @@ class MessagesActivity : AppCompatActivity() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_create_message, null)
         val inputTitle = dialogView.findViewById<EditText>(R.id.inputTitle)
         val inputBody = dialogView.findViewById<EditText>(R.id.inputBody)
+        val inputReceiver = dialogView.findViewById<EditText>(R.id.inputReceiver)
 
         AlertDialog.Builder(this)
             .setTitle("Create Message")
@@ -84,32 +85,33 @@ class MessagesActivity : AppCompatActivity() {
             .setPositiveButton("Send") { _, _ ->
                 val title = inputTitle.text.toString().trim()
                 val body = inputBody.text.toString().trim()
-                if (title.isNotEmpty() && body.isNotEmpty()) {
-                    sendMessageToFirestore(title, body)
+                val receiverId = inputReceiver.text.toString().trim()
+
+                if (title.isNotEmpty() && body.isNotEmpty() && receiverId.isNotEmpty()) {
+                    sendMessageToFirestore(title, body, receiverId)
                 } else {
-                    Toast.makeText(this, "Please enter title and body", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun sendMessageToFirestore(title: String, body: String) {
+
+    private fun sendMessageToFirestore(title: String, body: String, receiverId: String) {
         val docRef = db.collection("messages").document()
         val message = Message(
             id = docRef.id,
             title = title,
             body = body,
             senderId = currentUserId,
-            receiverId = "all", // change to a specific parent UID if you want to target one parent
+            receiverId = receiverId, // now dynamic
             timestamp = System.currentTimeMillis()
         )
 
         docRef.set(message)
             .addOnSuccessListener {
                 Toast.makeText(this, "Message sent", Toast.LENGTH_SHORT).show()
-                // The addSnapshotListener will pick this up and update UI for listeners.
-                // Optionally add locally for instant feedback:
                 messagesAdapter.addAtTop(message)
             }
             .addOnFailureListener { e ->
@@ -117,4 +119,5 @@ class MessagesActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to send message", Toast.LENGTH_SHORT).show()
             }
     }
+
 }

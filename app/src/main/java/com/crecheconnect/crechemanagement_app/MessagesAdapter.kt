@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MessagesAdapter(private val messages: List<Message>) : RecyclerView.Adapter<MessagesAdapter.MessageViewHolder>() {
+class MessagesAdapter(private val messages: MutableList<Message>) :
+    RecyclerView.Adapter<MessagesAdapter.MessageViewHolder>() {
 
     class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView = view.findViewById(R.id.message_title)
@@ -14,7 +15,8 @@ class MessagesAdapter(private val messages: List<Message>) : RecyclerView.Adapte
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_message, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_message, parent, false)
         return MessageViewHolder(view)
     }
 
@@ -25,4 +27,17 @@ class MessagesAdapter(private val messages: List<Message>) : RecyclerView.Adapte
     }
 
     override fun getItemCount() = messages.size
+
+    // helper to replace the list from Firestore snapshot
+    fun submitList(newList: List<Message>) {
+        messages.clear()
+        messages.addAll(newList)
+        notifyDataSetChanged()
+    }
+
+    // optional helper to add a single message at top
+    fun addAtTop(message: Message) {
+        messages.add(0, message)
+        notifyItemInserted(0)
+    }
 }

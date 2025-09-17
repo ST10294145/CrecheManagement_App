@@ -5,6 +5,8 @@ data class Message(
     val title: String = "",
     val body: String = "",
     val senderId: String = "",
-    val receiverId: String = "", // "all" for broadcast, or a specific parent UID
-    val timestamp: Long = System.currentTimeMillis()
+    val receiverId: String = "",
+    val timestamp: Long = 0L
 )
+
+

@@ -20,7 +20,6 @@ class StaffActivity : AppCompatActivity() {
         btnAttendance = findViewById(R.id.btnAttendance)
         btnEvents = findViewById(R.id.btnEvents)
         btnMessages = findViewById(R.id.btnMessages)
-        btnRegistration = findViewById(R.id.btnRegistration)
 
         // Attendance button → AttendanceActivity
         btnAttendance.setOnClickListener {
@@ -40,6 +39,5 @@ class StaffActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Registration is left as you said, but you can add logic here later
     }
 }

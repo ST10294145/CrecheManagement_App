@@ -58,6 +58,13 @@ class StaffActivity : AppCompatActivity() {
         btnCreateEvent.setOnClickListener {
             showCreateEventDialog()
         }
+
+        // Open EventsActivity when clicking "Events" button
+        btnEvents.setOnClickListener {
+            val intent = Intent(this, EventsActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun showCreateEventDialog() {

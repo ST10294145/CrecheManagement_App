@@ -164,16 +164,6 @@
                     android:rowOrderPreserved="false"
                     android:useDefaultMargins="true">
 
-                    <!-- Registration -->
-                    <Button
-                        android:id="@+id/btnRegistration"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:text="Registration"
-                        android:backgroundTint="@color/primary_blue"
-                        android:textColor="@color/white" />
-
                     <!-- Attendance -->
                     <Button
                         android:id="@+id/btnAttendance"

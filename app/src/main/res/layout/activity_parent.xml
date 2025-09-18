@@ -39,6 +39,7 @@
                 android:textColor="#006699" />
 
             <ImageView
+                android:id="@+id/ivProfileButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/profile_pic"

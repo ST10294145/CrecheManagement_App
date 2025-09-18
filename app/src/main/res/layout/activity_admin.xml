@@ -38,12 +38,14 @@
                 android:textColor="@color/primary_blue" />
 
             <ImageView
+                android:id="@+id/btnProfile"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/profile_pic2"
                 android:contentDescription="Profile Picture"
                 android:scaleType="centerCrop"
                 android:background="@drawable/circle_shape" />
+
         </LinearLayout>
 
         <!-- WELCOME CARD -->

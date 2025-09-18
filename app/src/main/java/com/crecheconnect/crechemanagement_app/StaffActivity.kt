@@ -49,9 +49,7 @@ class StaffActivity : AppCompatActivity() {
             startActivity(Intent(this, AttendanceActivity::class.java))
         }
 
-        btnEvents.setOnClickListener {
-            startActivity(Intent(this, EventsParentActivity::class.java))
-        }
+
 
         btnMessages.setOnClickListener {
             startActivity(Intent(this, MessagesActivity::class.java))

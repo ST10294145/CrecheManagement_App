@@ -3,6 +3,7 @@ package com.crecheconnect.crechemanagement_app
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -27,5 +28,15 @@ class ParentActivity : AppCompatActivity() {
             val intent = Intent(this, MessagesActivity::class.java)
             startActivity(intent)
         }
+
+        // === Profile Image Logic ===
+        val ivProfileButton = findViewById<ImageView>(R.id.ivProfileButton)
+        ivProfileButton.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
 }
+

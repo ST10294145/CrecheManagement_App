@@ -23,8 +23,9 @@
         android:id="@+id/inputReceiver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Receiver UID (or 'all')"
+        android:hint="Receiver Email (or 'all')"
         android:minHeight="48dp" />
+
 
     <Button
         android:id="@+id/btnSend"

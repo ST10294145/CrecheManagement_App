@@ -13,6 +13,9 @@
         android:theme="@style/Theme.CrecheManagement_App"
         tools:targetApi="31">
         <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminActivity"
             android:exported="false" />
         <activity
@@ -39,7 +42,6 @@
         <activity android:name=".AttendanceActivity" />
         <activity android:name=".EventsParentActivity" />
         <activity android:name=".MessagesActivity" />
-
     </application>
 
 </manifest>

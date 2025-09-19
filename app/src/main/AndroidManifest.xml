@@ -48,6 +48,10 @@
             android:name=".AttendanceActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ParentAttendanceActivity" />
+
+
         <!-- Other activities -->
         <activity
             android:name=".EventsActivity"

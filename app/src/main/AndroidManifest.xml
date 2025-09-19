@@ -54,6 +54,8 @@
         <!-- Attendance Activity -->
         <activity android:name=".AdminAttendanceActivity" />
 
+        <!-- Events Activity For Admin -->
+        <activity android:name=".AdminEventsActivity" android:exported="false" />
 
 
         <!-- Other activities -->

@@ -27,6 +27,11 @@ class AdminActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
+        // Events button → AdminActivity.kt
+        findViewById<Button>(R.id.btnAttendance).setOnClickListener {
+            startActivity(Intent(this, AdminEventsActivity::class.java))
+
+
         // Profile picture → ProfileActivity
         val profilePic: ImageView = findViewById(R.id.btnProfile)
         profilePic.setOnClickListener {
@@ -34,11 +39,7 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Attendance button
-        val btnAttendance: Button = findViewById(R.id.btnAttendance)
-        btnAttendance.setOnClickListener {
-            startActivity(Intent(this, AdminAttendanceActivity::class.java))
-        }
 
     }
 }
+    }

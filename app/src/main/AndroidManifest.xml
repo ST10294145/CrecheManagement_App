@@ -51,6 +51,10 @@
         <activity
             android:name=".ParentAttendanceActivity" />
 
+        <!-- Attendance Activity -->
+        <activity android:name=".AdminAttendanceActivity" />
+
+
 
         <!-- Other activities -->
         <activity

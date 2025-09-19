@@ -15,6 +15,7 @@ class AdminActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_admin)
 
+        // Adjust for system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -22,24 +23,28 @@ class AdminActivity : AppCompatActivity() {
         }
 
         // Registration button
-        val btnRegistration: Button = findViewById(R.id.btnRegistration)
-        btnRegistration.setOnClickListener {
+        findViewById<Button>(R.id.btnRegistration).setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        // Events button → AdminActivity.kt
+        // Attendance button
         findViewById<Button>(R.id.btnAttendance).setOnClickListener {
-            startActivity(Intent(this, AdminEventsActivity::class.java))
-
-
-        // Profile picture → ProfileActivity
-        val profilePic: ImageView = findViewById(R.id.btnProfile)
-        profilePic.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, AdminAttendanceActivity::class.java))
         }
 
+        // Events button
+        findViewById<Button>(R.id.btnEvents).setOnClickListener {
+            startActivity(Intent(this, EventsActivity::class.java)) // or AdminEventsActivity if you made it
+        }
 
+        // Messages button
+        findViewById<Button>(R.id.btnMessages).setOnClickListener {
+            startActivity(Intent(this, MessagesActivity::class.java))
+        }
+
+        // Profile picture → ProfileActivity
+        findViewById<ImageView>(R.id.btnProfile).setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
     }
 }
-    }

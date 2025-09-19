@@ -25,7 +25,7 @@ class AdminAttendanceAdapter(
     override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
         val attendance = attendanceList[position]
         holder.parentEmailText.text = attendance.parentEmail
-        holder.attendanceDateText.text = attendance.date
+        holder.attendanceDateText.text = attendance.date ?: "No Date"
         holder.attendanceStatusText.text = if (attendance.isPresent) "Present" else "Absent"
     }
 

@@ -10,7 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class AdminAttendanceActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ParentAttendanceAdapter
+    private lateinit var adapter: AdminAttendanceAdapter
     private val attendanceList = mutableListOf<Attendance>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +19,7 @@ class AdminAttendanceActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewAdminAttendance)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = ParentAttendanceAdapter(attendanceList)
+        adapter = AdminAttendanceAdapter(attendanceList)
         recyclerView.adapter = adapter
 
         fetchAllAttendance()

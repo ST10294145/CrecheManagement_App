@@ -23,28 +23,23 @@ class ParentActivity : AppCompatActivity() {
         }
 
         // Messages Button Logic
-        val btnViewMessages = findViewById<Button>(R.id.btnViewMessages)
-        btnViewMessages.setOnClickListener {
-            val intent = Intent(this, MessagesActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.btnViewMessages).setOnClickListener {
+            startActivity(Intent(this, MessagesActivity::class.java))
         }
 
         // Profile Image Logic
-        val ivProfileButton = findViewById<ImageView>(R.id.ivProfileButton)
-        ivProfileButton.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
+        findViewById<ImageView>(R.id.ivProfileButton).setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
 
         // Events Button Logic
-        val btnViewEvents = findViewById<Button>(R.id.btnViewEvents)
-        btnViewEvents.setOnClickListener {
-            val intent = Intent(this, EventsActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.btnViewEvents).setOnClickListener {
+            startActivity(Intent(this, EventsActivity::class.java))
         }
 
-
-
+        // Attendance Button Logic
+        findViewById<Button>(R.id.btnAttendance).setOnClickListener {
+            startActivity(Intent(this, ParentAttendanceActivity::class.java))
+        }
     }
 }
-

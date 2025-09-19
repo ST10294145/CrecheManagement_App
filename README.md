@@ -39,7 +39,5 @@ The app is integrated with **Firebase Authentication** and **Firestore** for sec
 - **RecyclerView** – display lists (attendance records, messages, events, products)
 - **ConstraintLayout** – responsive UI design
 
----
 
-## 📂 Project Structure
 

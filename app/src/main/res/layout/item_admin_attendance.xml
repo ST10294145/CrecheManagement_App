@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="8dp">
 
+    <!-- Parent Email -->
     <TextView
         android:id="@+id/parentEmailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Parent Email"
-        android:textStyle="bold"
-        android:textSize="16sp"/>
+        android:text="parent@email.com"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
 
+    <!-- Attendance Date -->
     <TextView
         android:id="@+id/attendanceDateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date"
-        android:textSize="14sp"/>
+        android:text="2025-09-19"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"/>
 
+    <!-- Attendance Status -->
     <TextView
         android:id="@+id/attendanceStatusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Status"
-        android:textSize="14sp"/>
+        android:text="Present"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"/>
 </LinearLayout>

@@ -1,45 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="12dp"
-    android:background="@android:color/white">
+    android:orientation="horizontal"
+    android:padding="8dp">
 
-    <!-- Child Name -->
     <TextView
-        android:id="@+id/childNameTextView"
-        android:layout_width="match_parent"
+        android:id="@+id/childName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Child Name"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:layout_marginBottom="8dp" />
+        android:layout_weight="1"
+        android:textSize="18sp" />
 
-    <!-- Radio Buttons: Present / Absent -->
-    <RadioGroup
-        android:id="@+id/attendanceRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/radioPresent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Present"
-            android:textColor="@color/black"
-            android:buttonTint="@color/black" />
-
-        <RadioButton
-            android:id="@+id/radioAbsent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Absent"
-            android:textColor="@color/black"
-            android:buttonTint="@color/black"
-            android:layout_marginStart="32dp" />
-    </RadioGroup>
+    <CheckBox
+        android:id="@+id/attendanceCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
-

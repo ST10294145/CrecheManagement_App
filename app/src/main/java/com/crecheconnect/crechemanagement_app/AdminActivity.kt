@@ -33,5 +33,12 @@ class AdminActivity : AppCompatActivity() {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }
+
+        // Attendance button
+        val btnAttendance: Button = findViewById(R.id.btnAttendance)
+        btnAttendance.setOnClickListener {
+            startActivity(Intent(this, AdminAttendanceActivity::class.java))
+        }
+
     }
 }

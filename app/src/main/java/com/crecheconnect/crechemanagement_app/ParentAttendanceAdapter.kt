@@ -3,29 +3,26 @@ package com.crecheconnect.crechemanagement_app
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ParentAttendanceAdapter(private val attendanceList: List<Attendance>) :
-    RecyclerView.Adapter<ParentAttendanceAdapter.ParentAttendanceViewHolder>() {
+    RecyclerView.Adapter<ParentAttendanceAdapter.AttendanceViewHolder>() {
 
-    class ParentAttendanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val parentEmailText: TextView = itemView.findViewById(R.id.attendanceStatusText)
-        val attendanceCheckBox: CheckBox = itemView.findViewById(R.id.attendanceCheckBox)
+    class AttendanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val statusText: TextView = itemView.findViewById(R.id.attendanceStatusText)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentAttendanceViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendanceViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_parent_attendance, parent, false)
-        return ParentAttendanceViewHolder(view)
+        return AttendanceViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ParentAttendanceViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
         val attendance = attendanceList[position]
-        holder.parentEmailText.text = attendance.parentEmail
-        holder.attendanceCheckBox.isChecked = attendance.isPresent
-        holder.attendanceCheckBox.isEnabled = false // Parent cannot edit
+        val status = if (attendance.isPresent) "✅ Present" else "❌ Absent"
+        holder.statusText.text = "📅 ${attendance.date} — $status"
     }
 
     override fun getItemCount(): Int = attendanceList.size

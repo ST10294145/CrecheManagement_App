@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
-
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AttendanceFragment : Fragment() {
 
@@ -41,13 +43,19 @@ class AttendanceFragment : Fragment() {
 
     private fun fetchParents() {
         val db = FirebaseFirestore.getInstance()
-        db.collection("users") // Make sure you have a "users" collection with parent emails
+        db.collection("users") // "users" collection must have email field
             .get()
             .addOnSuccessListener { result ->
                 attendanceList.clear()
                 for (doc in result) {
                     val email = doc.getString("email") ?: continue
-                    attendanceList.add(Attendance(parentEmail = email, isPresent = false))
+                    attendanceList.add(
+                        Attendance(
+                            parentEmail = email,
+                            isPresent = false,
+                            date = "" // blank until saved
+                        )
+                    )
                 }
                 attendanceAdapter.notifyDataSetChanged()
                 Log.d("AttendanceFragment", "Fetched ${attendanceList.size} parents")
@@ -59,15 +67,26 @@ class AttendanceFragment : Fragment() {
 
     private fun saveAttendance() {
         val db = FirebaseFirestore.getInstance()
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
         for (attendance in attendanceList) {
-            db.collection("attendance").document(attendance.parentEmail)
-                .set(attendance)
+            // Create a new record for each parent each day
+            val record = Attendance(
+                parentEmail = attendance.parentEmail,
+                isPresent = attendance.isPresent,
+                date = currentDate
+            )
+
+            db.collection("attendance")
+                .add(record) // add a new document, don’t overwrite
                 .addOnSuccessListener {
-                    Toast.makeText(context, "Attendance saved for ${attendance.parentEmail}", Toast.LENGTH_SHORT).show()
+                    Log.d("AttendanceFragment", "Saved attendance for ${attendance.parentEmail}")
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(context, "Failed to save attendance: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
+
+        Toast.makeText(context, "Attendance saved for $currentDate", Toast.LENGTH_SHORT).show()
     }
 }

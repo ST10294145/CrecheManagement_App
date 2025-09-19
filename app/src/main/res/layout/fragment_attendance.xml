@@ -17,11 +17,12 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewAttendance"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
+
 
         <Button
             android:id="@+id/btnSave"

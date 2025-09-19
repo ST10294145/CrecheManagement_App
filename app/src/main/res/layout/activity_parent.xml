@@ -298,6 +298,16 @@
                         android:backgroundTint="#006699"
                         android:textColor="#FFF" />
 
+                    <!-- Attendance -->
+                    <Button
+                        android:id="@+id/btnAttendance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:text="Attendace"
+                        android:backgroundTint="#006699"
+                        android:textColor="#FFF" />
+
                 </GridLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -1,7 +1,7 @@
 # CrecheConnect - Creche Management App
 
 CrecheConnect is a mobile application built with **Android Studio (Kotlin)** that streamlines day-to-day operations of a creche.  
-It provides role-based access for **Admins**, **Staff**, and **Parents**, with features for attendance, events, messaging, and reporting.  
+It provides role-based access for **Admins**, and **Parents**, with features for attendance, events, messaging, and reporting.  
 The app is integrated with **Firebase Authentication** and **Firestore** for secure login, role management, and real-time data storage.
 
 ---
@@ -10,24 +10,21 @@ The app is integrated with **Firebase Authentication** and **Firestore** for sec
 
 ### 🔑 Authentication & Roles
 - Firebase Authentication with **role-based accounts**:
-  - **Admin**: Registers and manages Staff and Parent accounts.
-  - **Staff**: Manages attendance, posts events, and sends messages.
+  - **Admin**: Registers and manages Parent accounts, Manages attendance, posts events, and sends messages.
   - **Parents**: View child attendance, events, and receive messages.
 
 ### 👩‍🏫 Admin
 - Create new Staff and Parent accounts.
 - View attendance and reports.
 - Manage overall system activities.
-
-### 👨‍🏫 Staff
 - Mark and view **attendance** for children.
 - Post **events** (activities, announcements).
-- Send and receive **messages** with parents/admins.
+- Send and receive **messages** with parents.
 
 ### 👪 Parents
 - View child’s **attendance history**.
 - See **upcoming events**.
-- Read and send **messages** to staff.
+- Read and send **messages** to admin.
 
 ---
 

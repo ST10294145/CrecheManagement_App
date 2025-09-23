@@ -41,5 +41,10 @@ class ParentActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnAttendance).setOnClickListener {
             startActivity(Intent(this, ParentAttendanceActivity::class.java))
         }
+
+        // Payment Button Logic
+        findViewById<Button>(R.id.btnPayments).setOnClickListener {
+            startActivity(Intent(this, PaymentActivity::class.java))
+        }
     }
 }

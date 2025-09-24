@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="Alacritty Configuration">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Alacritty Configuration" />
+              <option name="relativePathToSchema" value="https://raw.githubusercontent.com/distinction-dev/alacritty-schema/main/alacritty/reference.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="functions/node_modules/lru-memoizer/tsconfig.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>

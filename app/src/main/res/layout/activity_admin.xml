@@ -192,8 +192,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:text="Events"
                         android:backgroundTint="#388E3C"
+                        android:text="Events"
                         android:textColor="@color/white" />
 
                     <!-- Messages -->

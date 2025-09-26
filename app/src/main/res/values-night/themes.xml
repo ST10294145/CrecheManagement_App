@@ -1,7 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base application theme -->
     <style name="Base.Theme.CrecheManagement_App" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <!-- Primary brand colors -->
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+
+        <!-- Secondary color (used by pickers/accent) -->
+        <item name="colorSecondary">#FBC02D</item>
+        <item name="colorOnSecondary">#000000</item>
+
+        <!-- Optional: Tertiary if you want extra highlight shades -->
+        <item name="colorTertiary">#FBC02D</item>
+        <item name="colorOnTertiary">#000000</item>
+
     </style>
+
+    <style name="Theme.CrecheManagement_App" parent="Base.Theme.CrecheManagement_App" />
+
 </resources>

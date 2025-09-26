@@ -15,8 +15,13 @@
         <item name="colorTertiary">#FBC02D</item>
         <item name="colorOnTertiary">#000000</item>
 
-    </style>
+        <item name="materialAlertDialogTheme">@style/CustomAlertDialog</item>
 
+    </style>
+    <style name="CustomAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <!-- Change the dialog background -->
+        <item name="android:background">#FAEBD7</item>
+    </style>
     <style name="Theme.CrecheManagement_App" parent="Base.Theme.CrecheManagement_App" />
 
 </resources>

@@ -3,7 +3,8 @@
     android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#FAEBD7">
 
     <EditText
         android:id="@+id/inputTitle"
@@ -26,10 +27,11 @@
         android:hint="Receiver Email (or 'all')"
         android:minHeight="48dp" />
 
-
+<!--
     <Button
         android:id="@+id/btnSend"
         android:text="Send"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+        -->
 </LinearLayout>

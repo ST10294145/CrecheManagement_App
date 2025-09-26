@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#FFF5E6">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerMessages"
@@ -12,6 +13,7 @@
     <Button
         android:id="@+id/btnSend"
         android:text="Send Message"
+        android:backgroundTint="#43A047"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

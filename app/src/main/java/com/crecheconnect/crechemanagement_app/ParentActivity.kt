@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.crecheconnect.crechemanagement_app.payment.PaymentActivity
 
 class ParentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

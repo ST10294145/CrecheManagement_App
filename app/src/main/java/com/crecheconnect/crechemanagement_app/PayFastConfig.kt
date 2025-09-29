@@ -8,8 +8,10 @@ object PayFastConfig {
     // Sandbox URL (switch to https://www.payfast.co.za/eng/process when you go live)
     const val PAYFAST_URL = "https://sandbox.payfast.co.za/eng/process"
 
-    // Temporary redirect URLs (these can be updated to your server later)
-    const val RETURN_URL = "https://yourapp.com/return"
-    const val CANCEL_URL = "https://yourapp.com/cancel"
-    const val NOTIFY_URL = "https://yourapp.com/notify"
+    // Return and cancel URLs (these can be app-specific deep links)
+    const val RETURN_URL = "crecheapp://payfast/return"   // deep link back to your app
+    const val CANCEL_URL = "crecheapp://payfast/cancel"   // deep link back to your app
+
+    // Notify URL → this should point to your deployed Firebase HTTPS function
+    const val NOTIFY_URL = "https://us-central1-YOUR_PROJECT_ID.cloudfunctions.net/payfastNotify"
 }

@@ -1,9 +1,11 @@
 package com.crecheconnect.crechemanagement_app
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -28,14 +30,15 @@ class PayfastWebViewActivity : AppCompatActivity() {
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
 
+        // Add JS bridge for callbacks
+        webView.addJavascriptInterface(PayfastJSBridge(this), "AndroidPayfast")
+
         webView.webViewClient = object : WebViewClient() {
-            // For API >= 24
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 request?.url?.let { return handleUrl(it.toString()) }
                 return false
             }
 
-            // For older APIs
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 url?.let { return handleUrl(it) }
                 return false
@@ -75,14 +78,7 @@ class PayfastWebViewActivity : AppCompatActivity() {
 
     private fun handleUrl(url: String): Boolean {
         if (url.startsWith(PayFastConfig.RETURN_URL, ignoreCase = true)) {
-            Toast.makeText(this, "Returned from PayFast. Check server notify for final status.", Toast.LENGTH_LONG).show()
-            val uri = Uri.parse(url)
-            val pfPaymentId = uri.getQueryParameter("pf_payment_id")
-            val intent = intent
-            intent.putExtra("payfast_success", true)
-            intent.putExtra("pf_payment_id", pfPaymentId)
-            setResult(Activity.RESULT_OK, intent)
-            finish()
+            Toast.makeText(this, "Returned from PayFast. Waiting for JS callback…", Toast.LENGTH_LONG).show()
             return true
         } else if (url.startsWith(PayFastConfig.CANCEL_URL, ignoreCase = true)) {
             Toast.makeText(this, "Payment cancelled", Toast.LENGTH_SHORT).show()
@@ -103,5 +99,34 @@ class PayfastWebViewActivity : AppCompatActivity() {
             destroy()
         }
         super.onDestroy()
+    }
+
+    // JS bridge for payment status
+    class PayfastJSBridge(private val context: Context) {
+        @JavascriptInterface
+        fun onPaymentSuccess(paymentId: String?) {
+            val activity = context as Activity
+            activity.runOnUiThread {
+                Toast.makeText(context, "Payment successful! ID: $paymentId", Toast.LENGTH_LONG).show()
+                val resultIntent = activity.intent
+                resultIntent.putExtra("payfast_success", true)
+                resultIntent.putExtra("pf_payment_id", paymentId)
+                activity.setResult(Activity.RESULT_OK, resultIntent)
+                activity.finish()
+            }
+        }
+
+        @JavascriptInterface
+        fun onPaymentFailure(error: String?) {
+            val activity = context as Activity
+            activity.runOnUiThread {
+                Toast.makeText(context, "Payment failed: $error", Toast.LENGTH_LONG).show()
+                val resultIntent = activity.intent
+                resultIntent.putExtra("payfast_success", false)
+                resultIntent.putExtra("error", error)
+                activity.setResult(Activity.RESULT_CANCELED, resultIntent)
+                activity.finish()
+            }
+        }
     }
 }

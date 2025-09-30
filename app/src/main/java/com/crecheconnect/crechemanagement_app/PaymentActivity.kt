@@ -30,12 +30,14 @@ class PaymentActivity : AppCompatActivity() {
     private var lastPaymentId: String? = null
     private var lastAmount: String? = null
     private var lastItemName: String? = null
+    private var lastMerchantReference: String? = null  // Add this to store merchant reference
 
     private val payfastResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             lastPaymentId = result.data?.getStringExtra("pf_payment_id")
+            lastMerchantReference = result.data?.getStringExtra("merchant_reference")  // Get the merchant reference
             lastAmount = amountEditText.text.toString().ifEmpty { "100.00" }
             lastItemName = itemNameEditText.text.toString().ifEmpty { "Creche Payment" }
             Toast.makeText(this, "Payment successful! ID: $lastPaymentId", Toast.LENGTH_SHORT).show()
@@ -85,11 +87,23 @@ class PaymentActivity : AppCompatActivity() {
 
             val date = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault()).format(Date())
 
-            canvas.drawText("Receipt for $itemName", 10f, 25f, paint)
-            canvas.drawText("Amount: R$amount", 10f, 50f, paint)
-            canvas.drawText("Payment ID: $paymentId", 10f, 75f, paint)
-            canvas.drawText("Date: $date", 10f, 100f, paint)
-            canvas.drawText("Thank you for your payment!", 10f, 125f, paint)
+            var yPos = 25f
+            canvas.drawText("Receipt for $itemName", 10f, yPos, paint)
+            yPos += 25f
+            canvas.drawText("Amount: R$amount", 10f, yPos, paint)
+            yPos += 25f
+            canvas.drawText("Payment ID: $paymentId", 10f, yPos, paint)
+            yPos += 25f
+
+            // Add Merchant Reference to receipt
+            if (!lastMerchantReference.isNullOrEmpty()) {
+                canvas.drawText("Merchant Ref: $lastMerchantReference", 10f, yPos, paint)
+                yPos += 25f
+            }
+
+            canvas.drawText("Date: $date", 10f, yPos, paint)
+            yPos += 25f
+            canvas.drawText("Thank you for your payment!", 10f, yPos, paint)
 
             pdfDocument.finishPage(page)
 

@@ -1,5 +1,7 @@
 package com.crecheconnect.crechemanagement_app
 
+import java.util.*
+
 object PayFastConfig {
     // Your sandbox credentials
     const val MERCHANT_ID = "10042307"
@@ -12,4 +14,9 @@ object PayFastConfig {
     const val RETURN_URL = "https://crecheconnect.com/success"
     const val CANCEL_URL = "https://crecheconnect.com/cancel"
     const val NOTIFY_URL = "https://crecheconnect.com/notify"
+
+    // Generate unique merchant reference for tracking
+    fun generateMerchantReference(): String {
+        return "CRE${System.currentTimeMillis()}"
+    }
 }

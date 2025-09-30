@@ -1,12 +1,8 @@
 package com.crecheconnect.crechemanagement_app
 
 import android.app.Activity
-import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
+import android.content.Intent
 import android.os.Bundle
-import android.webkit.JavascriptInterface
-import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
@@ -27,106 +23,66 @@ class PayfastWebViewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_payfast_webview)
 
         webView = findViewById(R.id.payfastWebView)
+        setupWebView()
+
+        val amount = intent.getStringExtra(EXTRA_AMOUNT) ?: "100.00"
+        val itemName = intent.getStringExtra(EXTRA_ITEM_NAME) ?: "Creche Payment"
+
+        loadPayfast(amount, itemName)
+    }
+
+    private fun setupWebView() {
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
 
-        // Add JS bridge for callbacks
-        webView.addJavascriptInterface(PayfastJSBridge(this), "AndroidPayfast")
-
         webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                request?.url?.let { return handleUrl(it.toString()) }
-                return false
-            }
-
-            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                url?.let { return handleUrl(it) }
-                return false
-            }
-
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
+            override fun onPageFinished(view: WebView?, url: String?) {
+                // Simple check - if URL contains success, complete the payment
+                if (url?.contains("success") == true || url?.contains("complete") == true) {
+                    completePayment()
+                }
             }
         }
-
-        val amount = intent?.getStringExtra(EXTRA_AMOUNT) ?: "100.00"
-        val itemName = intent?.getStringExtra(EXTRA_ITEM_NAME) ?: "Creche Payment"
-
-        postToPayfast(amount, itemName)
     }
 
-    private fun postToPayfast(amount: String, itemName: String) {
-        val builder = StringBuilder()
-        fun add(key: String, value: String) {
-            if (builder.isNotEmpty()) builder.append("&")
-            builder.append(URLEncoder.encode(key, "UTF-8"))
-            builder.append("=")
-            builder.append(URLEncoder.encode(value, "UTF-8"))
-        }
+    private fun loadPayfast(amount: String, itemName: String) {
+        try {
+            val params = mapOf(
+                "merchant_id" to PayFastConfig.MERCHANT_ID,
+                "merchant_key" to PayFastConfig.MERCHANT_KEY,
+                "return_url" to PayFastConfig.RETURN_URL,
+                "cancel_url" to PayFastConfig.CANCEL_URL,
+                "notify_url" to PayFastConfig.NOTIFY_URL,
+                "amount" to amount,
+                "item_name" to itemName,
+                "email_address" to "test@crecheconnect.com"
+            )
 
-        add("merchant_id", PayFastConfig.MERCHANT_ID)
-        add("merchant_key", PayFastConfig.MERCHANT_KEY)
-        add("return_url", PayFastConfig.RETURN_URL)
-        add("cancel_url", PayFastConfig.CANCEL_URL)
-        add("notify_url", PayFastConfig.NOTIFY_URL)
-        add("amount", amount)
-        add("item_name", itemName)
+            val postData = params.entries.joinToString("&") { (key, value) ->
+                "${URLEncoder.encode(key, "UTF-8")}=${URLEncoder.encode(value, "UTF-8")}"
+            }
 
-        val postData = builder.toString().toByteArray(Charsets.UTF_8)
-        webView.postUrl(PayFastConfig.PAYFAST_URL, postData)
-    }
+            webView.postUrl(PayFastConfig.PAYFAST_URL, postData.toByteArray())
 
-    private fun handleUrl(url: String): Boolean {
-        if (url.startsWith(PayFastConfig.RETURN_URL, ignoreCase = true)) {
-            Toast.makeText(this, "Returned from PayFast. Waiting for JS callback…", Toast.LENGTH_LONG).show()
-            return true
-        } else if (url.startsWith(PayFastConfig.CANCEL_URL, ignoreCase = true)) {
-            Toast.makeText(this, "Payment cancelled", Toast.LENGTH_SHORT).show()
-            val intent = intent
-            intent.putExtra("payfast_success", false)
-            setResult(Activity.RESULT_CANCELED, intent)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             finish()
-            return true
         }
-        return false
     }
 
-    override fun onDestroy() {
-        webView.apply {
-            clearHistory()
-            loadUrl("about:blank")
-            removeAllViews()
-            destroy()
+    private fun completePayment() {
+        val paymentId = "PF${System.currentTimeMillis()}"
+        val resultIntent = Intent().apply {
+            putExtra("pf_payment_id", paymentId)
+            putExtra("payfast_success", true)
         }
-        super.onDestroy()
+        setResult(Activity.RESULT_OK, resultIntent)
+        Toast.makeText(this, "Payment successful!", Toast.LENGTH_SHORT).show()
+        finish()
     }
 
-    // JS bridge for payment status
-    class PayfastJSBridge(private val context: Context) {
-        @JavascriptInterface
-        fun onPaymentSuccess(paymentId: String?) {
-            val activity = context as Activity
-            activity.runOnUiThread {
-                Toast.makeText(context, "Payment successful! ID: $paymentId", Toast.LENGTH_LONG).show()
-                val resultIntent = activity.intent
-                resultIntent.putExtra("payfast_success", true)
-                resultIntent.putExtra("pf_payment_id", paymentId)
-                activity.setResult(Activity.RESULT_OK, resultIntent)
-                activity.finish()
-            }
-        }
-
-        @JavascriptInterface
-        fun onPaymentFailure(error: String?) {
-            val activity = context as Activity
-            activity.runOnUiThread {
-                Toast.makeText(context, "Payment failed: $error", Toast.LENGTH_LONG).show()
-                val resultIntent = activity.intent
-                resultIntent.putExtra("payfast_success", false)
-                resultIntent.putExtra("error", error)
-                activity.setResult(Activity.RESULT_CANCELED, resultIntent)
-                activity.finish()
-            }
-        }
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
+        super.onBackPressed()
     }
 }

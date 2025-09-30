@@ -17,6 +17,7 @@ class PayfastWebViewActivity : AppCompatActivity() {
     }
 
     private lateinit var webView: WebView
+    private var merchantReference: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +48,9 @@ class PayfastWebViewActivity : AppCompatActivity() {
 
     private fun loadPayfast(amount: String, itemName: String) {
         try {
+            // Generate unique reference for tracking
+            merchantReference = PayFastConfig.generateMerchantReference()
+
             val params = mapOf(
                 "merchant_id" to PayFastConfig.MERCHANT_ID,
                 "merchant_key" to PayFastConfig.MERCHANT_KEY,
@@ -55,7 +59,9 @@ class PayfastWebViewActivity : AppCompatActivity() {
                 "notify_url" to PayFastConfig.NOTIFY_URL,
                 "amount" to amount,
                 "item_name" to itemName,
-                "email_address" to "test@crecheconnect.com"
+                "email_address" to "test@crecheconnect.com",
+                "m_payment_id" to merchantReference,  // ← THIS IS THE KEY FOR TRACKING
+                "cell_number" to "0821234567"
             )
 
             val postData = params.entries.joinToString("&") { (key, value) ->
@@ -63,6 +69,9 @@ class PayfastWebViewActivity : AppCompatActivity() {
             }
 
             webView.postUrl(PayFastConfig.PAYFAST_URL, postData.toByteArray())
+
+            // Show the reference so you can look for it in PayFast dashboard
+            Toast.makeText(this, "Transaction Ref: $merchantReference", Toast.LENGTH_LONG).show()
 
         } catch (e: Exception) {
             Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -75,9 +84,10 @@ class PayfastWebViewActivity : AppCompatActivity() {
         val resultIntent = Intent().apply {
             putExtra("pf_payment_id", paymentId)
             putExtra("payfast_success", true)
+            putExtra("merchant_reference", merchantReference) // Pass back for receipt
         }
         setResult(Activity.RESULT_OK, resultIntent)
-        Toast.makeText(this, "Payment successful!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Payment successful! Ref: $merchantReference", Toast.LENGTH_LONG).show()
         finish()
     }
 

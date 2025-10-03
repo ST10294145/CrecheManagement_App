@@ -15,12 +15,23 @@
     <TextView
         android:id="@+id/textDescription"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"/>
 
     <TextView
         android:id="@+id/textDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#555555"
-        android:textSize="12sp"/>
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"/>
+
+    <Button
+        android:id="@+id/btnAddToCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add to Calendar"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#FF9800"
+        android:textColor="@android:color/white"/>
 </LinearLayout>

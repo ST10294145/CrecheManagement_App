@@ -1,10 +1,10 @@
 package com.crecheconnect.crechemanagement_app
 
 data class Event(
-    val id: String = "",
-    val title: String = "",
-    val description: String = "",
-    val dateTime: Long = 0L,
-    val endTime: Long = 0L,
-    val location: String = ""
+    var id: String = "",
+    var title: String = "",
+    var description: String = "",
+    var dateTime: Long = 0L,
+    var endTime: Long = 0L,
+    var location: String = ""
 )

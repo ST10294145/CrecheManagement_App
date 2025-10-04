@@ -17,6 +17,8 @@ class EventAdapter(private val events: List<Event>) : RecyclerView.Adapter<Event
         val title: TextView = itemView.findViewById(R.id.textTitle)
         val description: TextView = itemView.findViewById(R.id.textDescription)
         val dateTime: TextView = itemView.findViewById(R.id.textDateTime)
+        val endTime: TextView = itemView.findViewById(R.id.textEndTime)   // new field
+        val location: TextView = itemView.findViewById(R.id.textLocation) // new field
         val btnAddToCalendar: Button = itemView.findViewById(R.id.btnAddToCalendar)
     }
 
@@ -27,11 +29,13 @@ class EventAdapter(private val events: List<Event>) : RecyclerView.Adapter<Event
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
+        val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+
         holder.title.text = event.title
         holder.description.text = event.description
-
-        val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
-        holder.dateTime.text = sdf.format(Date(event.dateTime))
+        holder.dateTime.text = "Starts: ${sdf.format(Date(event.dateTime))}"
+        holder.endTime.text = "Ends: ${sdf.format(Date(event.endTime))}"
+        holder.location.text = "Location: ${event.location}"
 
         // Add to Calendar button
         holder.btnAddToCalendar.setOnClickListener {
@@ -39,8 +43,9 @@ class EventAdapter(private val events: List<Event>) : RecyclerView.Adapter<Event
                 data = CalendarContract.Events.CONTENT_URI
                 putExtra(CalendarContract.Events.TITLE, event.title)
                 putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+                putExtra(CalendarContract.Events.EVENT_LOCATION, event.location) // include location
                 putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.dateTime)
-                putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.dateTime + 60 * 60 * 1000) // 1 hour duration
+                putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.endTime)
             }
             it.context.startActivity(intent)
         }

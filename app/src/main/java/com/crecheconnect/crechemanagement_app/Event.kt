@@ -5,5 +5,6 @@ data class Event(
     val title: String = "",
     val description: String = "",
     val dateTime: Long = 0L,
-    val createdBy: String = ""
+    val endTime: Long = 0L,
+    val location: String = ""
 )

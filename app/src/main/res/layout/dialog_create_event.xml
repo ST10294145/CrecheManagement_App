@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="true">
+    android:background="#FAEBD7">
 
     <LinearLayout
-        android:padding="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FAEBD7"
         android:orientation="vertical">
 
         <EditText
@@ -23,43 +22,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Description"
-            android:minHeight="48dp" />
-
-        <!-- Start Date + Time -->
-        <DatePicker
-            android:id="@+id/datePicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Start Time"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
-
-        <TimePicker
-            android:id="@+id/timePicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:timePickerMode="spinner" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="End Time"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
-
-        <!-- End Time -->
-        <TimePicker
-            android:id="@+id/endTimePicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:timePickerMode="spinner"
+            android:minHeight="48dp"
             android:layout_marginTop="8dp" />
 
-        <!-- Location -->
         <EditText
             android:id="@+id/inputLocation"
             android:layout_width="match_parent"
@@ -68,13 +33,46 @@
             android:minHeight="48dp"
             android:layout_marginTop="8dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Time"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"/>
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Time"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+
+        <TimePicker
+            android:id="@+id/timePickerEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner"
+            android:layout_marginTop="4dp"/>
+
         <Button
             android:id="@+id/btnCreate"
             android:text="Create"
             android:backgroundTint="#FBC02D"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
-
+            android:layout_marginTop="16dp"/>
     </LinearLayout>
 </ScrollView>

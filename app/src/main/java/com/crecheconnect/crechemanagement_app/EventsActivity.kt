@@ -35,14 +35,7 @@ class EventsActivity : AppCompatActivity() {
                 eventList.clear()
                 for (doc in result) {
                     val event = doc.toObject(Event::class.java)
-
-                    // Ensure defaults for missing fields
-                    val fixedEvent = event.copy(
-                        endTime = if (event.endTime == 0L) event.dateTime else event.endTime,
-                        location = if (event.location.isEmpty()) "No location provided" else event.location
-                    )
-
-                    eventList.add(fixedEvent)
+                    eventList.add(event)
                 }
                 eventAdapter.notifyDataSetChanged()
             }

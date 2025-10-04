@@ -109,8 +109,7 @@ class StaffActivity : AppCompatActivity() {
                     id = eventId,
                     title = title,
                     description = description,
-                    dateTime = timestamp,
-                    createdBy = currentUser.uid
+                    dateTime = timestamp
                 )
 
                 db.collection("events").document(eventId)

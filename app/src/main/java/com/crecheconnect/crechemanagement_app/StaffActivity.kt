@@ -1,14 +1,11 @@
 package com.crecheconnect.crechemanagement_app
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -21,7 +18,6 @@ class StaffActivity : AppCompatActivity() {
     private lateinit var btnCreateEvent: Button
     private lateinit var btnProfile: ImageView
 
-    // Replace this with your actual user role check
     private var currentUserRole: String = "staff" // Example: "staff" or "parent"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,64 +37,63 @@ class StaffActivity : AppCompatActivity() {
         }
 
         // Button click listeners
-        btnProfile.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
-        }
-
-        btnAttendance.setOnClickListener {
-            startActivity(Intent(this, AttendanceActivity::class.java))
-        }
-
-
-
-        btnMessages.setOnClickListener {
-            startActivity(Intent(this, MessagesActivity::class.java))
-        }
-
-        btnCreateEvent.setOnClickListener {
-            showCreateEventDialog()
-        }
-
-        // Open EventsActivity when clicking "Events" button
-        btnEvents.setOnClickListener {
-            val intent = Intent(this, EventsActivity::class.java)
-            startActivity(intent)
-        }
-
+        btnProfile.setOnClickListener { startActivity(Intent(this, ProfileActivity::class.java)) }
+        btnAttendance.setOnClickListener { startActivity(Intent(this, AttendanceActivity::class.java)) }
+        btnMessages.setOnClickListener { startActivity(Intent(this, MessagesActivity::class.java)) }
+        btnEvents.setOnClickListener { startActivity(Intent(this, EventsActivity::class.java)) }
+        btnCreateEvent.setOnClickListener { showCreateEventDialog() }
     }
 
     private fun showCreateEventDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_create_event, null)
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
+        val dialog = AlertDialog.Builder(this).setView(dialogView).create()
 
         val inputTitle = dialogView.findViewById<EditText>(R.id.inputTitle)
         val inputDescription = dialogView.findViewById<EditText>(R.id.inputDescription)
-        val datePicker = dialogView.findViewById<android.widget.DatePicker>(R.id.datePicker)
-        val timePicker = dialogView.findViewById<android.widget.TimePicker>(R.id.timePicker)
+        val inputLocation = dialogView.findViewById<EditText>(R.id.inputLocation) // New field
+        val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
+        val startTimePicker = dialogView.findViewById<TimePicker>(R.id.timePicker)
+        val endTimePicker = dialogView.findViewById<TimePicker>(R.id.timePickerEnd) // New field
         val btnCreate = dialogView.findViewById<Button>(R.id.btnCreate)
 
         btnCreate.setOnClickListener {
             val title = inputTitle.text.toString().trim()
             val description = inputDescription.text.toString().trim()
+            val location = inputLocation.text.toString().trim()
 
-            if (title.isEmpty() || description.isEmpty()) {
+            if (title.isEmpty() || description.isEmpty() || location.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Convert date & time to timestamp
-            val calendar = Calendar.getInstance()
-            calendar.set(
+            // Start timestamp
+            val startCalendar = Calendar.getInstance()
+            startCalendar.set(
                 datePicker.year,
                 datePicker.month,
                 datePicker.dayOfMonth,
-                timePicker.hour,
-                timePicker.minute,
+                startTimePicker.hour,
+                startTimePicker.minute,
                 0
             )
-            val timestamp = calendar.timeInMillis
+            val startTimestamp = startCalendar.timeInMillis
+
+            // End timestamp
+            val endCalendar = Calendar.getInstance()
+            endCalendar.set(
+                datePicker.year,
+                datePicker.month,
+                datePicker.dayOfMonth,
+                endTimePicker.hour,
+                endTimePicker.minute,
+                0
+            )
+            val endTimestamp = endCalendar.timeInMillis
+
+            if (endTimestamp <= startTimestamp) {
+                Toast.makeText(this, "End time must be after start time", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             val currentUser = FirebaseAuth.getInstance().currentUser
             if (currentUser != null) {
@@ -109,7 +104,9 @@ class StaffActivity : AppCompatActivity() {
                     id = eventId,
                     title = title,
                     description = description,
-                    dateTime = timestamp
+                    dateTime = startTimestamp,
+                    endTime = endTimestamp,
+                    location = location
                 )
 
                 db.collection("events").document(eventId)

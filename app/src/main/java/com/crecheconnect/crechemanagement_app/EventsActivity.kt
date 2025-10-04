@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class EventsActivity : AppCompatActivity() {
 
@@ -28,13 +29,20 @@ class EventsActivity : AppCompatActivity() {
     private fun fetchEvents() {
         val db = FirebaseFirestore.getInstance()
         db.collection("events")
-            .orderBy("dateTime")
+            .orderBy("dateTime", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { result ->
                 eventList.clear()
                 for (doc in result) {
                     val event = doc.toObject(Event::class.java)
-                    eventList.add(event)
+
+                    // Ensure defaults for missing fields
+                    val fixedEvent = event.copy(
+                        endTime = if (event.endTime == 0L) event.dateTime else event.endTime,
+                        location = if (event.location.isEmpty()) "No location provided" else event.location
+                    )
+
+                    eventList.add(fixedEvent)
                 }
                 eventAdapter.notifyDataSetChanged()
             }

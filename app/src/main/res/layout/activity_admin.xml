@@ -205,6 +205,18 @@
                         android:text="Messages"
                         android:backgroundTint="#FBC02D"
                         android:textColor="@color/black" />
+
+                    <!-- Create Event (Staff Only) -->
+                    <Button
+                        android:id="@+id/btnCreateEvent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:text="Create Event"
+                        android:backgroundTint="#1976D2"
+                        android:textColor="@color/white" />
+
+
                 </GridLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>

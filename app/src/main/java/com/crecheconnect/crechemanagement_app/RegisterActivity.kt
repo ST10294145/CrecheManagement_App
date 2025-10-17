@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -93,10 +94,16 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            auth.createUserWithEmailAndPassword(email, password)
+            val currentAdmin = auth.currentUser  // Save admin session
+
+            // ✅ Create a SECONDARY FirebaseAuth instance to register new user
+            val secondaryAuth = FirebaseAuth.getInstance(FirebaseApp.getInstance())
+
+            secondaryAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val uid = auth.currentUser?.uid ?: ""
+                        val newUser = task.result?.user
+                        val uid = newUser?.uid ?: ""
 
                         // Base user info
                         val userData = hashMapOf(
@@ -105,7 +112,7 @@ class RegisterActivity : AppCompatActivity() {
                             "role" to selectedRole
                         )
 
-                        // If user is a parent, add parent + child info
+                        // Add parent info
                         if (selectedRole == "parent") {
                             val parentData = mapOf(
                                 "parentName" to parentName.text.toString().trim(),
@@ -126,6 +133,12 @@ class RegisterActivity : AppCompatActivity() {
                                     "User registered successfully!",
                                     Toast.LENGTH_SHORT
                                 ).show()
+
+                                // ✅ Re-authenticate admin after registering the user
+                                secondaryAuth.signOut()
+                                if (currentAdmin != null) {
+                                    auth.updateCurrentUser(currentAdmin)
+                                }
                             }
                             .addOnFailureListener {
                                 Toast.makeText(

@@ -64,12 +64,14 @@
                     android:textColor="#000" />
 
                 <EditText
+                    android:id="@+id/parentName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Parent Name"
                     android:background="@android:drawable/edit_text" />
 
                 <EditText
+                    android:id="@+id/PhoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Mobile Number"
@@ -78,6 +80,7 @@
                     android:background="@android:drawable/edit_text" />
 
                 <EditText
+                    android:id="@+id/homeAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Home Address"
@@ -94,12 +97,14 @@
                     android:textColor="#000" />
 
                 <EditText
+                    android:id="@+id/childFullName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Child's Full Name"
                     android:background="@android:drawable/edit_text" />
 
                 <EditText
+                    android:id="@+id/childDob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Date of Birth"
@@ -108,6 +113,7 @@
                     android:background="@android:drawable/edit_text" />
 
                 <EditText
+                    android:id="@+id/childGender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Gender"

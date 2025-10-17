@@ -22,11 +22,9 @@ class RegisterActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
 
-        // Firebase
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // Layout padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -44,9 +42,17 @@ class RegisterActivity : AppCompatActivity() {
         val staffSection: LinearLayout = findViewById(R.id.staffSection)
         val adminSection: LinearLayout = findViewById(R.id.adminSection)
 
-        var selectedRole = "parent" // default role
+        // Parent fields
+        val parentName: EditText = findViewById(R.id.parentName)
+        val parentPhone: EditText = findViewById(R.id.PhoneNumber)
+        val parentAddress: EditText = findViewById(R.id.homeAddress)
+        val childName: EditText = findViewById(R.id.childFullName)
+        val childDob: EditText = findViewById(R.id.childDob)
+        val childGender: EditText = findViewById(R.id.childGender)
 
-        // Handle role changes
+        var selectedRole = "parent"
+
+        // Handle role selection
         roleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
@@ -77,7 +83,7 @@ class RegisterActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        // Handle Sign Up
+        // Handle registration
         signUpButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()
@@ -87,29 +93,53 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Register user in Firebase Auth
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val uid = auth.currentUser?.uid ?: ""
 
-                        // Build user object
-                        val user = hashMapOf(
+                        // Base user info
+                        val userData = hashMapOf(
                             "uid" to uid,
                             "email" to email,
                             "role" to selectedRole
                         )
 
+                        // If user is a parent, add parent + child info
+                        if (selectedRole == "parent") {
+                            val parentData = mapOf(
+                                "parentName" to parentName.text.toString().trim(),
+                                "phoneNumber" to parentPhone.text.toString().trim(),
+                                "address" to parentAddress.text.toString().trim(),
+                                "childName" to childName.text.toString().trim(),
+                                "childDob" to childDob.text.toString().trim(),
+                                "childGender" to childGender.text.toString().trim()
+                            )
+                            userData.putAll(parentData)
+                        }
+
                         // Save to Firestore
-                        db.collection("users").document(uid).set(user)
+                        db.collection("users").document(uid).set(userData)
                             .addOnSuccessListener {
-                                Toast.makeText(this, "User registered successfully!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    "User registered successfully!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                             .addOnFailureListener {
-                                Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    "Failed to save user data",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                     } else {
-                        Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Error: ${task.exception?.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
         }

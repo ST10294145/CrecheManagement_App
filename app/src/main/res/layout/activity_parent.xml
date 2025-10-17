@@ -125,16 +125,18 @@
                         android:layout_marginStart="12dp">
 
                         <TextView
+                            android:id="@+id/tvChildName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Child's Name: Emily Johnson"
+                            android:text="Child's Name:"
                             android:textSize="14sp"
                             android:textColor="#000" />
 
                         <TextView
+                            android:id="@+id/tvChildAge"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Age: 6"
+                            android:text="Age:"
                             android:textSize="14sp"
                             android:textColor="#000" />
                     </LinearLayout>

@@ -54,13 +54,10 @@ class AdminActivity : AppCompatActivity() {
             startActivity(Intent(this, AttendanceActivity::class.java)) // Goes to attendance marking page
         }
 
+        // UPDATED: Open new activity for viewing attendance
         btnCheckAttendance.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, AdminAttendanceFragment())
-                .addToBackStack(null)
-                .commit()
+            startActivity(Intent(this, ViewAttendanceActivity::class.java))
         }
-
 
         btnEvents.setOnClickListener {
             startActivity(Intent(this, EventsActivity::class.java))

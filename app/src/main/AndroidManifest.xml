@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29"/>
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -20,52 +19,41 @@
         android:theme="@style/Theme.CrecheManagement_App"
         tools:targetApi="31">
 
-
+        <!-- Payment activities -->
         <activity android:name=".payment.PaymentActivity" />
         <activity android:name=".PayfastWebViewActivity" />
 
-
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AdminActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StaffActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ParentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
+        <!-- Main and authentication -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Attendance Activity -->
-        <activity
-            android:name=".AttendanceActivity"
-            android:exported="false" />
-        <activity android:name=".ParentAttendanceActivity" /> <!-- Attendance Activity -->
-        <activity android:name=".AdminAttendanceActivity" /> <!-- Events Activity For Admin -->
-        <activity
-            android:name=".AdminEventsActivity"
-            android:exported="false" /> <!-- Other activities -->
-        <activity
-            android:name=".EventsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MessagesActivity"
-            android:exported="false" />
+        </activity>
+        <activity android:name=".LoginActivity" android:exported="false" />
+        <activity android:name=".RegisterActivity" android:exported="false" />
+
+        <!-- Admin and Staff -->
+        <activity android:name=".AdminActivity" android:exported="false" />
+        <activity android:name=".StaffActivity" android:exported="false" />
+        <activity android:name=".ParentActivity" android:exported="false" />
+        <activity android:name=".ProfileActivity" android:exported="false" />
+
+        <!-- Attendance Activities -->
+        <activity android:name=".AttendanceActivity" android:exported="false" />
+        <activity android:name=".ParentAttendanceActivity" android:exported="false" />
+        <activity android:name=".AdminAttendanceActivity" android:exported="false" />
+        <activity android:name=".ViewAttendanceActivity" android:exported="false" />
+
+        <!-- Events Activities -->
+        <activity android:name=".EventsActivity" android:exported="false" />
+        <activity android:name=".AdminEventsActivity" android:exported="false" />
+
+        <!-- Messages -->
+        <activity android:name=".MessagesActivity" android:exported="false" />
+
     </application>
 
 </manifest>

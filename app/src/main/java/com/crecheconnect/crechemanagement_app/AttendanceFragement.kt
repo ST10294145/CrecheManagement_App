@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -11,11 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import java.text.SimpleDateFormat
-import java.util.*
-import android.widget.ArrayAdapter
-
 
 class AttendanceFragment : Fragment() {
 
@@ -77,7 +75,7 @@ class AttendanceFragment : Fragment() {
                             childName = childName,
                             subject = "",
                             isPresent = false,
-                            date = ""
+                            date = null
                         )
                     )
                 }
@@ -90,14 +88,14 @@ class AttendanceFragment : Fragment() {
     }
 
     private fun saveAttendance(selectedSubject: String) {
-        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val currentTimestamp = Timestamp.now()
 
         for (attendance in attendanceList) {
             val record = Attendance(
                 childName = attendance.childName,
                 subject = selectedSubject,
                 isPresent = attendance.isPresent,
-                date = currentDate
+                date = currentTimestamp
             )
 
             db.collection("attendance")
@@ -107,6 +105,6 @@ class AttendanceFragment : Fragment() {
                 }
         }
 
-        Toast.makeText(context, "Attendance saved for $selectedSubject ($currentDate)", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Attendance saved for $selectedSubject", Toast.LENGTH_LONG).show()
     }
 }

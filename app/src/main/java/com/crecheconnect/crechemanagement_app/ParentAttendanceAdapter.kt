@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ParentAttendanceAdapter(private val attendanceList: List<Attendance>) :
     RecyclerView.Adapter<ParentAttendanceAdapter.AttendanceViewHolder>() {
@@ -22,7 +24,12 @@ class ParentAttendanceAdapter(private val attendanceList: List<Attendance>) :
     override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
         val attendance = attendanceList[position]
         val status = if (attendance.isPresent) "✅ Present" else "❌ Absent"
-        holder.statusText.text = "${attendance.date} — $status"
+
+        val formattedDate = attendance.date?.toDate()?.let {
+            SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(it)
+        } ?: "No date"
+
+        holder.statusText.text = "${attendance.childName} — $formattedDate — $status"
     }
 
     override fun getItemCount(): Int = attendanceList.size

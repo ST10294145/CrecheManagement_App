@@ -7,4 +7,12 @@
         <item>Admin</item>
     </string-array>
 
+    <!-- Add this new array for subjects -->
+    <string-array name="subjects_array">
+        <item>Math</item>
+        <item>English</item>
+        <item>Natural Science</item>
+        <item>Physical Education</item>
+        <item>Life Orientation</item>
+    </string-array>
 </resources>

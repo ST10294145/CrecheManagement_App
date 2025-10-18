@@ -1,7 +1,8 @@
 package com.crecheconnect.crechemanagement_app
 
 data class Attendance(
-    var date: String = "", // Displays date
-    var parentEmail: String = "", // Display this in RecyclerView
-    var isPresent: Boolean = false // Attendance status
+    var childName: String = "",
+    var subject: String = "",
+    var isPresent: Boolean = false,
+    var date: String = ""
 )

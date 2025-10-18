@@ -213,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
                         android:text="Create Event"
-                        android:backgroundTint="#1976D2"
+                        android:backgroundTint="#800080"
                         android:textColor="@color/white" />
 
                     <!-- Mark Attendance -->
@@ -225,6 +225,18 @@
                         android:text="Mark Attendance"
                         android:backgroundTint="#F4511E"
                         android:textColor="@color/white" />
+
+                    <!-- Check Attendance -->
+                    <Button
+                        android:id="@+id/btnCheckAttendance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:text="Check Attendance"
+                        android:backgroundTint="#FF9800"
+                        android:textColor="@color/white" />
+
+
 
 
                 </GridLayout>

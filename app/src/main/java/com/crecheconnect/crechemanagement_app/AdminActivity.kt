@@ -19,6 +19,7 @@ class AdminActivity : AppCompatActivity() {
     private lateinit var btnCreateEvent: Button
     private lateinit var btnRegistration: Button
     private lateinit var btnAttendance: Button
+    private lateinit var btnCheckAttendance: Button
     private lateinit var btnEvents: Button
     private lateinit var btnMessages: Button
     private lateinit var btnProfile: ImageView
@@ -38,6 +39,7 @@ class AdminActivity : AppCompatActivity() {
         // Initialize buttons
         btnRegistration = findViewById(R.id.btnRegistration)
         btnAttendance = findViewById(R.id.btnAttendance)
+        btnCheckAttendance = findViewById(R.id.btnCheckAttendance)
         btnEvents = findViewById(R.id.btnEvents)
         btnMessages = findViewById(R.id.btnMessages)
         btnProfile = findViewById(R.id.btnProfile)
@@ -51,6 +53,14 @@ class AdminActivity : AppCompatActivity() {
         btnAttendance.setOnClickListener {
             startActivity(Intent(this, AttendanceActivity::class.java)) // Goes to attendance marking page
         }
+
+        btnCheckAttendance.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, AdminAttendanceFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
 
         btnEvents.setOnClickListener {
             startActivity(Intent(this, EventsActivity::class.java))

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +17,11 @@ class ParentAttendanceFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var attendanceAdapter: ParentAttendanceAdapter
+    private lateinit var subjectDropdown: AutoCompleteTextView
     private val attendanceList = mutableListOf<Attendance>()
+    private val db = FirebaseFirestore.getInstance()
+
+    private val subjects = listOf("Select Subject", "Math", "English", "Natural Science", "P.E.", "L.O.")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,34 +30,75 @@ class ParentAttendanceFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_parent_attendance, container, false)
 
         recyclerView = view.findViewById(R.id.recyclerViewParentAttendance)
+        subjectDropdown = view.findViewById(R.id.dropdownSubject)
         recyclerView.layoutManager = LinearLayoutManager(context)
         attendanceAdapter = ParentAttendanceAdapter(attendanceList)
         recyclerView.adapter = attendanceAdapter
 
-        fetchAttendance()
+        setupSubjectDropdown()
+        fetchAttendanceForSubject("Select Subject") // Default empty state
 
         return view
     }
 
-    private fun fetchAttendance() {
-        val db = FirebaseFirestore.getInstance()
-        val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
+    private fun setupSubjectDropdown() {
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, subjects)
+        subjectDropdown.setAdapter(adapter)
 
-        if (currentUserEmail != null) {
-            db.collection("attendance")
-                .whereEqualTo("parentEmail", currentUserEmail)
-                .get()
-                .addOnSuccessListener { result ->
-                    attendanceList.clear()
-                    for (doc in result) {
-                        val attendance = doc.toObject(Attendance::class.java)
-                        attendanceList.add(attendance)
-                    }
-                    attendanceAdapter.notifyDataSetChanged()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(context, "Error fetching attendance: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+        subjectDropdown.setOnItemClickListener { _, _, position, _ ->
+            val selectedSubject = subjects[position]
+            if (selectedSubject != "Select Subject") {
+                fetchAttendanceForSubject(selectedSubject)
+            } else {
+                attendanceList.clear()
+                attendanceAdapter.notifyDataSetChanged()
+            }
         }
+    }
+
+    private fun fetchAttendanceForSubject(subject: String) {
+        val currentUser = FirebaseAuth.getInstance().currentUser ?: return
+        val userEmail = currentUser.email ?: return
+
+        // Step 1: Get the parent’s child name from Firestore
+        db.collection("users")
+            .whereEqualTo("email", userEmail)
+            .get()
+            .addOnSuccessListener { result ->
+                if (!result.isEmpty) {
+                    val childName = result.documents[0].getString("childName")
+
+                    if (!childName.isNullOrEmpty()) {
+                        // Step 2: Fetch attendance for that child and selected subject
+                        db.collection("attendance")
+                            .whereEqualTo("childName", childName)
+                            .whereEqualTo("subject", subject)
+                            .get()
+                            .addOnSuccessListener { attendanceResult ->
+                                attendanceList.clear()
+                                for (doc in attendanceResult) {
+                                    val attendance = doc.toObject(Attendance::class.java)
+                                    attendanceList.add(attendance)
+                                }
+
+                                if (attendanceList.isEmpty()) {
+                                    Toast.makeText(context, "No attendance found for $subject", Toast.LENGTH_SHORT).show()
+                                }
+
+                                attendanceAdapter.notifyDataSetChanged()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(context, "Error loading attendance: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(context, "No child linked to this account.", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(context, "Parent record not found.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error fetching child: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 }

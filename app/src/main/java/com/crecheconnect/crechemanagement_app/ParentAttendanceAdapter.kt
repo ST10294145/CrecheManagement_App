@@ -22,7 +22,7 @@ class ParentAttendanceAdapter(private val attendanceList: List<Attendance>) :
     override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
         val attendance = attendanceList[position]
         val status = if (attendance.isPresent) "✅ Present" else "❌ Absent"
-        holder.statusText.text = "📅 ${attendance.date} — $status"
+        holder.statusText.text = "${attendance.date} — $status"
     }
 
     override fun getItemCount(): Int = attendanceList.size

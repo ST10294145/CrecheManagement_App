@@ -7,11 +7,13 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class AttendanceAdapter(private val attendanceList: MutableList<Attendance>) :
-    RecyclerView.Adapter<AttendanceAdapter.AttendanceViewHolder>() {
+class AttendanceAdapter(
+    private val attendanceList: List<Attendance>,
+    private val selectedSubject: String
+) : RecyclerView.Adapter<AttendanceAdapter.AttendanceViewHolder>() {
 
     class AttendanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val parentEmailText: TextView = itemView.findViewById(R.id.parentEmailText) // UPDATED to match XML
+        val childNameText: TextView = itemView.findViewById(R.id.childNameText)
         val attendanceCheckBox: CheckBox = itemView.findViewById(R.id.attendanceCheckBox)
     }
 
@@ -23,11 +25,14 @@ class AttendanceAdapter(private val attendanceList: MutableList<Attendance>) :
 
     override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
         val attendance = attendanceList[position]
-        holder.parentEmailText.text = attendance.parentEmail
+        holder.childNameText.text = attendance.childName
+
+        holder.attendanceCheckBox.setOnCheckedChangeListener(null)
         holder.attendanceCheckBox.isChecked = attendance.isPresent
 
         holder.attendanceCheckBox.setOnCheckedChangeListener { _, isChecked ->
             attendance.isPresent = isChecked
+            attendance.subject = selectedSubject
         }
     }
 

@@ -2,8 +2,9 @@ package com.crecheconnect.crechemanagement_app
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -40,7 +41,7 @@ class AdminActivity : AppCompatActivity() {
         btnEvents = findViewById(R.id.btnEvents)
         btnMessages = findViewById(R.id.btnMessages)
         btnProfile = findViewById(R.id.btnProfile)
-        btnCreateEvent = findViewById(R.id.btnCreateEvent) // ✅ Create Event button
+        btnCreateEvent = findViewById(R.id.btnCreateEvent)
 
         // Navigation buttons
         btnRegistration.setOnClickListener {
@@ -48,7 +49,7 @@ class AdminActivity : AppCompatActivity() {
         }
 
         btnAttendance.setOnClickListener {
-            startActivity(Intent(this, AdminAttendanceActivity::class.java))
+            startActivity(Intent(this, AttendanceActivity::class.java)) // Goes to attendance marking page
         }
 
         btnEvents.setOnClickListener {
@@ -63,7 +64,6 @@ class AdminActivity : AppCompatActivity() {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
 
-        // ✅ Create Event Button
         btnCreateEvent.setOnClickListener {
             showCreateEventDialog()
         }
@@ -73,12 +73,12 @@ class AdminActivity : AppCompatActivity() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_create_event, null)
         val dialog = AlertDialog.Builder(this).setView(dialogView).create()
 
-        val inputTitle = dialogView.findViewById<EditText>(R.id.inputTitle)
-        val inputDescription = dialogView.findViewById<EditText>(R.id.inputDescription)
-        val inputLocation = dialogView.findViewById<EditText>(R.id.inputLocation)
-        val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
-        val startTimePicker = dialogView.findViewById<TimePicker>(R.id.timePicker)
-        val endTimePicker = dialogView.findViewById<TimePicker>(R.id.timePickerEnd)
+        val inputTitle = dialogView.findViewById<android.widget.EditText>(R.id.inputTitle)
+        val inputDescription = dialogView.findViewById<android.widget.EditText>(R.id.inputDescription)
+        val inputLocation = dialogView.findViewById<android.widget.EditText>(R.id.inputLocation)
+        val datePicker = dialogView.findViewById<android.widget.DatePicker>(R.id.datePicker)
+        val startTimePicker = dialogView.findViewById<android.widget.TimePicker>(R.id.timePicker)
+        val endTimePicker = dialogView.findViewById<android.widget.TimePicker>(R.id.timePickerEnd)
         val btnCreate = dialogView.findViewById<Button>(R.id.btnCreate)
 
         btnCreate.setOnClickListener {
@@ -149,4 +149,3 @@ class AdminActivity : AppCompatActivity() {
         dialog.show()
     }
 }
-//test commit

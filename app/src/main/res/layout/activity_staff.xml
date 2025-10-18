@@ -167,7 +167,7 @@
                     android:rowOrderPreserved="false"
                     android:useDefaultMargins="true">
 
-                    <!-- Attendance -->
+                    <!-- Mark Attendance -->
                     <Button
                         android:id="@+id/btnAttendance"
                         android:layout_width="0dp"

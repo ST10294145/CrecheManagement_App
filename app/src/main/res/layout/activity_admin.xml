@@ -177,14 +177,14 @@
                         android:textColor="@color/white" />
 
                     <!-- Attendance -->
-                    <Button
+                   <!-- <Button
                         android:id="@+id/btnAttendance"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
                         android:text="Attendance"
                         android:backgroundTint="#F4511E"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white" /> -->
 
                     <!-- Events -->
                     <Button
@@ -214,6 +214,16 @@
                         android:layout_columnWeight="1"
                         android:text="Create Event"
                         android:backgroundTint="#1976D2"
+                        android:textColor="@color/white" />
+
+                    <!-- Mark Attendance -->
+                    <Button
+                        android:id="@+id/btnAttendance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:text="Mark Attendance"
+                        android:backgroundTint="#F4511E"
                         android:textColor="@color/white" />
 
 

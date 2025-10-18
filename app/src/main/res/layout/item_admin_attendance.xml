@@ -1,35 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="8dp">
 
-    <!-- Parent Email -->
     <TextView
-        android:id="@+id/parentEmailText"
-        android:layout_width="wrap_content"
+        android:id="@+id/childNameText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="parent@email.com"
+        android:layout_weight="2"
+        android:text="Child Name"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/subjectText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="Subject"
         android:textSize="16sp"
-        android:textStyle="bold"/>
+        android:textColor="@android:color/darker_gray" />
 
-    <!-- Attendance Date -->
-    <TextView
-        android:id="@+id/attendanceDateText"
+    <CheckBox
+        android:id="@+id/attendanceCheckBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2025-09-19"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"/>
-
-    <!-- Attendance Status -->
-    <TextView
-        android:id="@+id/attendanceStatusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Present"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"/>
+        android:layout_height="wrap_content"/>
 </LinearLayout>

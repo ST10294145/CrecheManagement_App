@@ -3,14 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="12dp"
+    android:background="?android:attr/selectableItemBackground">
 
     <TextView
-        android:id="@+id/parentEmailText"
+        android:id="@+id/childNameText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="18sp" />
+        android:text="Child Name"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <CheckBox
         android:id="@+id/attendanceCheckBox"

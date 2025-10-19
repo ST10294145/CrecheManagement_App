@@ -7,13 +7,14 @@ import android.graphics.pdf.PdfDocument
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.crecheconnect.crechemanagement_app.PayfastWebViewActivity
 import com.crecheconnect.crechemanagement_app.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -26,18 +27,23 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var itemNameEditText: EditText
     private lateinit var payButton: Button
     private lateinit var receiptButton: Button
+    private lateinit var addCardButton: Button
+    private lateinit var viewCardButton: Button
+
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
     private var lastPaymentId: String? = null
     private var lastAmount: String? = null
     private var lastItemName: String? = null
-    private var lastMerchantReference: String? = null  // Add this to store merchant reference
+    private var lastMerchantReference: String? = null
 
     private val payfastResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             lastPaymentId = result.data?.getStringExtra("pf_payment_id")
-            lastMerchantReference = result.data?.getStringExtra("merchant_reference")  // Get the merchant reference
+            lastMerchantReference = result.data?.getStringExtra("merchant_reference")
             lastAmount = amountEditText.text.toString().ifEmpty { "100.00" }
             lastItemName = itemNameEditText.text.toString().ifEmpty { "Creche Payment" }
             Toast.makeText(this, "Payment successful! ID: $lastPaymentId", Toast.LENGTH_SHORT).show()
@@ -54,6 +60,8 @@ class PaymentActivity : AppCompatActivity() {
         itemNameEditText = findViewById(R.id.itemNameEditText)
         payButton = findViewById(R.id.payButton)
         receiptButton = findViewById(R.id.btnReceipt)
+        addCardButton = findViewById(R.id.btnAddCard)
+        viewCardButton = findViewById(R.id.btnViewCard)
 
         payButton.setOnClickListener {
             val amount = amountEditText.text.toString().ifEmpty { "100.00" }
@@ -73,8 +81,153 @@ class PaymentActivity : AppCompatActivity() {
                 Toast.makeText(this, "No successful payment yet!", Toast.LENGTH_SHORT).show()
             }
         }
+
+        addCardButton.setOnClickListener {
+            showAddCardDialog()
+        }
+
+        viewCardButton.setOnClickListener {
+            showViewCardDialog()
+        }
     }
 
+    // 🪪 Add Card Dialog with validation
+    private fun showAddCardDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Add Card")
+
+        val layout = layoutInflater.inflate(R.layout.dialog_add_card, null)
+        val cardNumberInput = layout.findViewById<EditText>(R.id.cardNumberInput)
+        val cardHolderInput = layout.findViewById<EditText>(R.id.cardHolderInput)
+        val expiryInput = layout.findViewById<EditText>(R.id.expiryInput)
+        val cvvInput = layout.findViewById<EditText>(R.id.cvvInput)
+
+        // Restrict input to numbers
+        cardNumberInput.inputType = android.text.InputType.TYPE_CLASS_NUMBER
+        cvvInput.inputType = android.text.InputType.TYPE_CLASS_NUMBER
+
+        builder.setView(layout)
+        builder.setPositiveButton("Save") { _, _ ->
+            val cardNumber = cardNumberInput.text.toString().trim()
+            val cardHolder = cardHolderInput.text.toString().trim()
+            val expiryDate = expiryInput.text.toString().trim()
+            val cvv = cvvInput.text.toString().trim()
+
+            // Check for empty fields
+            if (cardNumber.isEmpty() || cardHolder.isEmpty() || expiryDate.isEmpty() || cvv.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            // Validate card number length (16 digits)
+            if (cardNumber.length != 16) {
+                Toast.makeText(this, "Card number must be exactly 16 digits", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            // Validate CVV length (3 digits)
+            if (cvv.length != 3) {
+                Toast.makeText(this, "CVV must be exactly 3 digits", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            val uid = auth.currentUser?.uid
+            if (uid == null) {
+                Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            val cardData = hashMapOf(
+                "cardNumber" to cardNumber,
+                "cardHolder" to cardHolder,
+                "expiryDate" to expiryDate,
+                "cvv" to cvv
+            )
+
+            db.collection("parentCards").document(uid)
+                .set(cardData)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Card saved successfully", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed to save card", Toast.LENGTH_SHORT).show()
+                }
+        }
+
+        builder.setNegativeButton("Cancel", null)
+        builder.show()
+    }
+
+    // 👁️ View/Delete Card Dialog with masking
+    private fun showViewCardDialog() {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        db.collection("parentCards").document(uid).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val cardNumber = document.getString("cardNumber") ?: "N/A"
+                    val cardHolder = document.getString("cardHolder") ?: "N/A"
+                    val expiryDate = document.getString("expiryDate") ?: "N/A"
+                    val cvv = document.getString("cvv") ?: "N/A"
+
+                    val dialogView = layoutInflater.inflate(R.layout.dialog_view_card, null)
+                    val cardNumberText = dialogView.findViewById<TextView>(R.id.cardNumberText)
+                    val cardHolderText = dialogView.findViewById<TextView>(R.id.cardHolderText)
+                    val expiryText = dialogView.findViewById<TextView>(R.id.expiryText)
+                    val cvvText = dialogView.findViewById<TextView>(R.id.cvvText)
+                    val deleteCardButton = dialogView.findViewById<Button>(R.id.deleteCardButton)
+
+                    // Mask card number and CVV
+                    cardNumberText.text = "Card Number: ${maskCardNumber(cardNumber)}"
+                    cardHolderText.text = "Card Holder: $cardHolder"
+                    expiryText.text = "Expiry Date: $expiryDate"
+                    cvvText.text = "CVV: ${maskCVV(cvv)}"
+
+                    val dialog = AlertDialog.Builder(this)
+                        .setView(dialogView)
+                        .setCancelable(true)
+                        .create()
+
+                    deleteCardButton.setOnClickListener {
+                        db.collection("parentCards").document(uid).delete()
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Card deleted successfully", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, "Failed to delete card", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+
+                    dialog.show()
+                } else {
+                    Toast.makeText(this, "No saved card found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error loading card info", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    // 🔒 Mask card number
+    private fun maskCardNumber(number: String): String {
+        return if (number.length >= 4) {
+            "**** **** **** ${number.takeLast(4)}"
+        } else {
+            "****"
+        }
+    }
+
+    // 🔒 Mask CVV
+    private fun maskCVV(cvv: String): String {
+        return "***"
+    }
+
+    // 📄 Generate Receipt PDF (existing logic)
     private fun generateReceiptPdf(amount: String, itemName: String, paymentId: String) {
         try {
             val pdfDocument = PdfDocument()
@@ -95,7 +248,6 @@ class PaymentActivity : AppCompatActivity() {
             canvas.drawText("Payment ID: $paymentId", 10f, yPos, paint)
             yPos += 25f
 
-            // Add Merchant Reference to receipt
             if (!lastMerchantReference.isNullOrEmpty()) {
                 canvas.drawText("Merchant Ref: $lastMerchantReference", 10f, yPos, paint)
                 yPos += 25f

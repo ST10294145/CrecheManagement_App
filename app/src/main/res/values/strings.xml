@@ -15,4 +15,10 @@
         <item>Physical Education</item>
         <item>Life Orientation</item>
     </string-array>
+
+    <string-array name="allergy_options">
+        <item>No</item>
+        <item>Yes</item>
+    </string-array>
+
 </resources>

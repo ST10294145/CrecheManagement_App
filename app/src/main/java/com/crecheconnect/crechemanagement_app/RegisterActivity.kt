@@ -50,6 +50,8 @@ class RegisterActivity : AppCompatActivity() {
         val childName: EditText = findViewById(R.id.childFullName)
         val childDob: EditText = findViewById(R.id.childDob)
         val childGender: EditText = findViewById(R.id.childGender)
+        val allergySpinner: Spinner = findViewById(R.id.allergySpinner)
+        val allergyDetails: EditText = findViewById(R.id.allergyDetails)
 
         var selectedRole = "parent"
 
@@ -79,6 +81,20 @@ class RegisterActivity : AppCompatActivity() {
                         "admin"
                     }
                 }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        allergySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selected = parent.getItemAtPosition(position).toString()
+                allergyDetails.visibility = if (selected == "Yes") View.VISIBLE else View.GONE
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -120,7 +136,9 @@ class RegisterActivity : AppCompatActivity() {
                                 "address" to parentAddress.text.toString().trim(),
                                 "childName" to childName.text.toString().trim(),
                                 "childDob" to childDob.text.toString().trim(),
-                                "childGender" to childGender.text.toString().trim()
+                                "childGender" to childGender.text.toString().trim(),
+                                "hasAllergies" to allergySpinner.selectedItem.toString(),
+                                "allergyDetails" to allergyDetails.text.toString().trim()
                             )
                             userData.putAll(parentData)
                         }

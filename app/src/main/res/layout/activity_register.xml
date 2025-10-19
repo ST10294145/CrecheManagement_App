@@ -119,6 +119,30 @@
                     android:hint="Gender"
                     android:layout_marginTop="4dp"
                     android:background="@android:drawable/edit_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Does your child have any allergies?"
+                    android:layout_marginTop="12dp"
+                    android:textColor="#000" />
+
+                <Spinner
+                    android:id="@+id/allergySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/allergy_options"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/edit_text" />
+
+                <EditText
+                    android:id="@+id/allergyDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Please specify allergies"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/edit_text"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- Staff Section -->

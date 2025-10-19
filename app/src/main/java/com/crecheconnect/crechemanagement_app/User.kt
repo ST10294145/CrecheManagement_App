@@ -13,5 +13,8 @@ data class User(
     // Child info
     val childName: String = "",
     val childDob: String = "",
-    val childGender: String = ""
+    val childGender: String = "",
+    val hasAllergies: String = "",
+    val allergyDetails: String = ""
+
 )

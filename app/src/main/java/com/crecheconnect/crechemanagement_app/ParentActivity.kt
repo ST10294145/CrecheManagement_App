@@ -40,6 +40,8 @@ class ParentActivity : AppCompatActivity() {
         // 🔹 Find the TextViews
         val tvChildName: TextView = findViewById(R.id.tvChildName)
         val tvChildAge: TextView = findViewById(R.id.tvChildAge)
+        val tvChildAllergies: TextView = findViewById(R.id.tvChildAllergies)
+
 
         // 🔹 Fetch the logged-in user’s info
         val uid = auth.currentUser?.uid
@@ -56,12 +58,22 @@ class ParentActivity : AppCompatActivity() {
                         } else {
                             "Unknown"
                         }
+                        val hasAllergies = document.getString("hasAllergies") ?: "No"
+                        val allergyDetails = document.getString("allergyDetails") ?: ""
+
+                        tvChildAllergies.text = if (hasAllergies == "Yes" && allergyDetails.isNotEmpty()) {
+                            "Allergies: $allergyDetails"
+                        } else {
+                            "Allergies: None"
+                        }
+
 
                         tvChildName.text = "Child's Name: $childName"
                         tvChildAge.text = "Age: $ageText"
                     } else {
                         Toast.makeText(this, "No user data found", Toast.LENGTH_SHORT).show()
                     }
+
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Failed to load child info", Toast.LENGTH_SHORT).show()

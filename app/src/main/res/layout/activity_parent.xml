@@ -139,15 +139,24 @@
                             android:text="Age:"
                             android:textSize="14sp"
                             android:textColor="#000" />
+
+                        <TextView
+                            android:id="@+id/tvChildAllergies"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Allergies:"
+                            android:textSize="14sp"
+                            android:textColor="#000" />
+
                     </LinearLayout>
                 </LinearLayout>
-
+            <!--
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="View Profile"
                     android:backgroundTint="#FFB566"
-                    android:textColor="#000" />
+                    android:textColor="#000" /> -->
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

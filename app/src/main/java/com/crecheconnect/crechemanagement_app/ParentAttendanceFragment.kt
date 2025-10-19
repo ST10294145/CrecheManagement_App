@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ParentAttendanceFragment : Fragment() {
 
@@ -60,7 +63,6 @@ class ParentAttendanceFragment : Fragment() {
         val currentUser = FirebaseAuth.getInstance().currentUser ?: return
         val userEmail = currentUser.email ?: return
 
-        // Step 1: Get the parent’s child name from Firestore
         db.collection("users")
             .whereEqualTo("email", userEmail)
             .get()
@@ -69,10 +71,11 @@ class ParentAttendanceFragment : Fragment() {
                     val childName = result.documents[0].getString("childName")
 
                     if (!childName.isNullOrEmpty()) {
-                        // Step 2: Fetch attendance for that child and selected subject
+                        // 🔹 Sorted query by date (oldest → newest)
                         db.collection("attendance")
                             .whereEqualTo("childName", childName)
                             .whereEqualTo("subject", subject)
+                            .orderBy("date", Query.Direction.ASCENDING)
                             .get()
                             .addOnSuccessListener { attendanceResult ->
                                 attendanceList.clear()

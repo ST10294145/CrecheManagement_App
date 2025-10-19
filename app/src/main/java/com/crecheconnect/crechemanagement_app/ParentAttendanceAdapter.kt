@@ -23,13 +23,14 @@ class ParentAttendanceAdapter(private val attendanceList: List<Attendance>) :
 
     override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
         val attendance = attendanceList[position]
+
+        val dateString = attendance.date?.toDate()?.let { date ->
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+        } ?: "No Date"
+
         val status = if (attendance.isPresent) "✅ Present" else "❌ Absent"
 
-        val formattedDate = attendance.date?.toDate()?.let {
-            SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(it)
-        } ?: "No date"
-
-        holder.statusText.text = "${attendance.childName} — $formattedDate — $status"
+        holder.statusText.text = "${attendance.childName} — $dateString — $status"
     }
 
     override fun getItemCount(): Int = attendanceList.size

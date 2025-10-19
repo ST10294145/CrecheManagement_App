@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AttendanceFragment : Fragment() {
 
@@ -88,14 +89,14 @@ class AttendanceFragment : Fragment() {
     }
 
     private fun saveAttendance(selectedSubject: String) {
-        val currentTimestamp = Timestamp.now()
+        val currentDate = com.google.firebase.Timestamp.now()
 
         for (attendance in attendanceList) {
             val record = Attendance(
                 childName = attendance.childName,
                 subject = selectedSubject,
                 isPresent = attendance.isPresent,
-                date = currentTimestamp
+                date = currentDate
             )
 
             db.collection("attendance")

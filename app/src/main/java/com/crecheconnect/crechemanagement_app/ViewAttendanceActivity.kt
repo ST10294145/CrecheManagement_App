@@ -51,10 +51,11 @@ class ViewAttendanceActivity : AppCompatActivity() {
     }
 
     private fun fetchAttendanceForSubject(subject: String) {
-        db.collection("attendance")
+        val query: Query = db.collection("attendance")
             .whereEqualTo("subject", subject)
-            .orderBy("date", Query.Direction.ASCENDING)
-            .get()
+            .orderBy("date", Query.Direction.ASCENDING) // oldest → newest
+
+        query.get()
             .addOnSuccessListener { result ->
                 attendanceList.clear()
                 for (doc in result) {

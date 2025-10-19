@@ -1,18 +1,20 @@
-package com.crecheconnect.crechemanagement_app.payment
+package com.crecheconnect.crechemanagement_app
 
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.crecheconnect.crechemanagement_app.PayfastWebViewActivity
-import com.crecheconnect.crechemanagement_app.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
@@ -41,7 +43,7 @@ class PaymentActivity : AppCompatActivity() {
     private val payfastResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             lastPaymentId = result.data?.getStringExtra("pf_payment_id")
             lastMerchantReference = result.data?.getStringExtra("merchant_reference")
             lastAmount = amountEditText.text.toString().ifEmpty { "100.00" }
@@ -91,7 +93,7 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
-    // 🪪 Add Card Dialog with validation
+    // 🪪 Add Card Dialog with validation and auto-slash for expiry date
     private fun showAddCardDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Add Card")
@@ -103,8 +105,33 @@ class PaymentActivity : AppCompatActivity() {
         val cvvInput = layout.findViewById<EditText>(R.id.cvvInput)
 
         // Restrict input to numbers
-        cardNumberInput.inputType = android.text.InputType.TYPE_CLASS_NUMBER
-        cvvInput.inputType = android.text.InputType.TYPE_CLASS_NUMBER
+        cardNumberInput.inputType = InputType.TYPE_CLASS_NUMBER
+        cvvInput.inputType = InputType.TYPE_CLASS_NUMBER
+
+        // Automatically add slash for expiry date (MM/YY) without infinite loop
+        expiryInput.addTextChangedListener(object : TextWatcher {
+            private var isFormatting = false
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isFormatting) return
+                isFormatting = true
+
+                s?.let {
+                    val clean = it.toString().replace("/", "")
+                    if (clean.length >= 3) {
+                        val month = clean.substring(0, 2)
+                        val year = clean.substring(2, clean.length)
+                        expiryInput.setText("$month/$year")
+                        expiryInput.setSelection(expiryInput.text.length)
+                    }
+                }
+
+                isFormatting = false
+            }
+        })
 
         builder.setView(layout)
         builder.setPositiveButton("Save") { _, _ ->
@@ -227,7 +254,7 @@ class PaymentActivity : AppCompatActivity() {
         return "***"
     }
 
-    // 📄 Generate Receipt PDF (existing logic)
+    // 📄 Generate Receipt PDF
     private fun generateReceiptPdf(amount: String, itemName: String, paymentId: String) {
         try {
             val pdfDocument = PdfDocument()
@@ -235,7 +262,7 @@ class PaymentActivity : AppCompatActivity() {
             val page = pdfDocument.startPage(pageInfo)
             val canvas = page.canvas
 
-            val paint = android.graphics.Paint()
+            val paint = Paint()
             paint.textSize = 14f
 
             val date = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault()).format(Date())
@@ -262,11 +289,11 @@ class PaymentActivity : AppCompatActivity() {
             val fileName = "Receipt_${System.currentTimeMillis()}.pdf"
             val outputStream: OutputStream = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val contentValues = ContentValues().apply {
-                    put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-                    put(android.provider.MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
-                    put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
                 }
-                val uri = contentResolver.insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+                val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
                 if (uri != null) {
                     contentResolver.openOutputStream(uri)!!
                 } else throw Exception("Failed to create file Uri")

@@ -123,27 +123,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Payment Method:"
+            android:text="Your bank card:"
             android:textStyle="bold"
             android:textSize="15sp"
             android:layout_marginBottom="6dp"/>
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="16dp">
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Credit/Debit Card" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Visa" />
-        </RadioGroup>
 
         <!-- Pay Button -->
         <Button

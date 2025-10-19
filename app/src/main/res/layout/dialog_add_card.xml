@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/cardNumberInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Card Number"
+        android:inputType="number"
+        android:maxLength="16"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/cardHolderInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Card Holder Name"
+        android:inputType="textCapWords"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/expiryInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Expiry (MM/YY)"
+        android:inputType="text"
+        android:maxLength="5"/>
+
+    <EditText
+        android:id="@+id/cvvInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="CVV"
+        android:inputType="numberPassword"
+        android:padding="10dp"
+        android:layout_marginBottom="6dp"/>
+
+</LinearLayout>

@@ -53,6 +53,12 @@ class RegisterActivity : AppCompatActivity() {
         val allergySpinner: Spinner = findViewById(R.id.allergySpinner)
         val allergyDetails: EditText = findViewById(R.id.allergyDetails)
 
+        // Admin Fields
+        // Admin fields
+        val adminName: EditText = findViewById(R.id.adminFullName)
+        val adminPhone: EditText = findViewById(R.id.adminPhoneNumber)
+
+
         var selectedRole = "parent"
 
         // Handle role selection
@@ -142,6 +148,15 @@ class RegisterActivity : AppCompatActivity() {
                             )
                             userData.putAll(parentData)
                         }
+
+                        if (selectedRole == "admin") {
+                            val adminData = mapOf(
+                                "parentName" to adminName.text.toString().trim(),  // reuse same key for consistency
+                                "phoneNumber" to adminPhone.text.toString().trim()
+                            )
+                            userData.putAll(adminData)
+                        }
+
 
                         // Save to Firestore
                         db.collection("users").document(uid).set(userData)

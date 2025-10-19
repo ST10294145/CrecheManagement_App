@@ -4,18 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#F9FAFB">
+    android:padding="12dp"
+    android:background="#FAEBD7">
 
     <!-- Header -->
     <TextView
         android:id="@+id/viewAttendanceTitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="View Attendance"
-        android:textSize="22sp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:gravity="center"
         android:textColor="#000000"
         android:layout_marginBottom="16dp" />
 
@@ -26,7 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Select Subject"
-        >
+        app:endIconMode="dropdown_menu"
+        android:layout_marginBottom="12dp">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/dropdownSubjectView"
@@ -37,16 +37,13 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- RecyclerView -->
+    <!-- Attendance List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewViewAttendance"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:layout_weight="1"
-        android:background="@android:color/white"
         android:padding="8dp"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:clipToPadding="false" />
 
 </LinearLayout>

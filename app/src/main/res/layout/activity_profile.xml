@@ -128,6 +128,16 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- inside activity_profile.xml, just below btnLogout -->
+        <Button
+            android:id="@+id/btnChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Password"
+            android:backgroundTint="#4A90E2"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="12dp" />
+
         <!-- Logout Button -->
         <Button
             android:id="@+id/btnLogout"

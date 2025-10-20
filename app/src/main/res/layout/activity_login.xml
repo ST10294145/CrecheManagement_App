@@ -106,14 +106,6 @@
                 android:text="Forgot Password?"
                 android:textSize="14sp"
                 android:textColor="#000" />
-
-            <TextView
-                android:id="@+id/registerHere"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Register Here"
-                android:textSize="14sp"
-                android:textColor="#000" />
         </LinearLayout>
 
     </LinearLayout>

@@ -4,51 +4,44 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
 
-    // Firebase Authentication instance (used for logging in users)
     private lateinit var auth: FirebaseAuth
-
-    // Firestore instance (used to fetch extra user details like role)
     private lateinit var db: FirebaseFirestore
 
-    // UI components
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
     private lateinit var loginButton: Button
     private lateinit var togglePassword: ImageView
+    private lateinit var forgotPasswordText: TextView
 
-    // State to track password visibility
     private var isPasswordVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Initialize Firebase Auth and Firestore
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // Link UI components from XML layout
         emailInput = findViewById(R.id.emailInput)
         passwordInput = findViewById(R.id.passwordInput)
         loginButton = findViewById(R.id.loginButton)
         togglePassword = findViewById(R.id.togglePassword)
+        forgotPasswordText = findViewById(R.id.forgotPassword)
 
-        // Handle login button click
+        // === LOGIN ===
         loginButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()
 
-            // Validate input fields before attempting login
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 loginUser(email, password)
             } else {
@@ -56,40 +49,35 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // Handle eye icon click to toggle password visibility
+        // === PASSWORD TOGGLE ===
         togglePassword.setOnClickListener {
             if (isPasswordVisible) {
-                // Hide password
                 passwordInput.inputType =
                     InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 isPasswordVisible = false
             } else {
-                // Show password
                 passwordInput.inputType =
                     InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 isPasswordVisible = true
             }
-            // Keep cursor at the end of the text
             passwordInput.setSelection(passwordInput.text.length)
+        }
+
+        // === FORGOT PASSWORD ===
+        forgotPasswordText.setOnClickListener {
+            showForgotPasswordDialog()
         }
     }
 
-    /**
-     * Attempts to log the user in using Firebase Authentication.
-     * If successful, fetches the user’s role from Firestore.
-     */
     private fun loginUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Get the logged-in user's unique ID
                     val uid = auth.currentUser?.uid
                     if (uid != null) {
-                        // Fetch the user document from Firestore to get their role
                         db.collection("users").document(uid).get()
                             .addOnSuccessListener { document ->
                                 if (document.exists()) {
-                                    // Extract the "role" field from Firestore
                                     val role = document.getString("role")
                                     navigateToRoleActivity(role)
                                 } else {
@@ -97,22 +85,16 @@ class LoginActivity : AppCompatActivity() {
                                 }
                             }
                             .addOnFailureListener { e ->
-                                // Log error for debugging and show failure message
                                 Log.e("LoginActivity", "Error fetching role: ${e.message}")
                                 Toast.makeText(this, "Failed to get user role", Toast.LENGTH_SHORT).show()
                             }
                     }
                 } else {
-                    // If authentication fails, display error message
                     Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-    /**
-     * Directs the user to their appropriate activity based on their role.
-     * Roles supported: parent, staff, admin.
-     */
     private fun navigateToRoleActivity(role: String?) {
         when (role) {
             "parent" -> startActivity(Intent(this, ParentActivity::class.java))
@@ -120,7 +102,51 @@ class LoginActivity : AppCompatActivity() {
             "admin" -> startActivity(Intent(this, AdminActivity::class.java))
             else -> Toast.makeText(this, "Invalid role", Toast.LENGTH_SHORT).show()
         }
-        // Close the login screen so user cannot go back to it using the back button
         finish()
+    }
+
+    // === FORGOT PASSWORD DIALOG ===
+    private fun showForgotPasswordDialog() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_forgot_password, null)
+        val emailInput = dialogView.findViewById<EditText>(R.id.etForgotEmail)
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Reset Password")
+            .setView(dialogView)
+            .setPositiveButton("Send", null)
+            .setNegativeButton("Cancel") { d, _ -> d.dismiss() }
+            .create()
+
+        dialog.setOnShowListener {
+            val sendButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            sendButton.setOnClickListener {
+                val email = emailInput.text.toString().trim()
+
+                if (email.isEmpty()) {
+                    emailInput.error = "Enter your email address"
+                    return@setOnClickListener
+                }
+
+                auth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(
+                                this,
+                                "Password reset email sent to $email",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            dialog.dismiss()
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "Failed to send reset email: ${task.exception?.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+            }
+        }
+
+        dialog.show()
     }
 }

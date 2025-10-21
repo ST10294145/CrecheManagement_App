@@ -40,7 +40,6 @@ android {
     }
 }
 
-// Ensure all Kotlin compile tasks use JVM 1.8
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
@@ -54,28 +53,20 @@ dependencies {
     // Firebase SDKs
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
-
-    // Firebase Realtime Database
     implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-functions-ktx")
 
     // AndroidX
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-
-    // dropdown menu
-    implementation("com.google.android.material:material:1.10.0")
-
+    implementation("com.google.android.material:material:1.12.0") // dropdown menu already included
 
     // Stripe Android SDK
     implementation("com.stripe:stripe-android:20.45.0")
-
-    // Firebase Functions client (to call your backend securely)
-    implementation("com.google.firebase:firebase-functions-ktx")
 
     // Testing
     testImplementation("junit:junit:4.13.2")

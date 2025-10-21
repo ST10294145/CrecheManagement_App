@@ -14,7 +14,6 @@ class ChatRepository {
         val adminUid = auth.currentUser?.uid ?: return
         val chatRef = database.child("chats")
 
-        // Search for existing chat
         chatRef.orderByChild("participants").get().addOnSuccessListener { snapshot ->
             var chatIdFound: String? = null
             for (child in snapshot.children) {
@@ -28,7 +27,6 @@ class ChatRepository {
             if (chatIdFound != null) {
                 onComplete(chatIdFound)
             } else {
-                // Create new chat
                 val newChatId = chatRef.push().key ?: UUID.randomUUID().toString()
                 val chat = Chat(
                     chatId = newChatId,
@@ -46,12 +44,14 @@ class ChatRepository {
     // Send a message
     fun sendMessage(chatId: String, messageText: String) {
         val senderUid = auth.currentUser?.uid ?: return
-        val receiverUidRef = database.child("chats").child(chatId).child("participants")
-        receiverUidRef.get().addOnSuccessListener { snapshot ->
+        val participantsRef = database.child("chats").child(chatId).child("participants")
+        participantsRef.get().addOnSuccessListener { snapshot ->
             val participants = snapshot.value as? List<*>
             val receiverUid = participants?.firstOrNull { it != senderUid } as? String ?: return@addOnSuccessListener
 
-            val messageId = database.child("chats").child(chatId).child("messages").push().key ?: UUID.randomUUID().toString()
+            val messageId = database.child("chats").child(chatId).child("messages").push().key
+                ?: UUID.randomUUID().toString()
+
             val message = ChatMessage(
                 messageId = messageId,
                 senderId = senderUid,
@@ -60,10 +60,7 @@ class ChatRepository {
                 timestamp = System.currentTimeMillis()
             )
 
-            // Save message
             database.child("chats").child(chatId).child("messages").child(messageId).setValue(message)
-
-            // Update chat last message
             database.child("chats").child(chatId).child("lastMessage").setValue(messageText)
             database.child("chats").child(chatId).child("lastTimestamp").setValue(System.currentTimeMillis())
         }

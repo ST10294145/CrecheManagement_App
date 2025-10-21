@@ -66,22 +66,27 @@ class ParentActivity : AppCompatActivity() {
                 }
         }
 
-        findViewById<Button>(R.id.btnViewMessages).setOnClickListener {
+        // Messages Button
+        findViewById<Button>(R.id.btnMessages).setOnClickListener {
             startActivity(Intent(this, ChatMessagesActivity::class.java))
         }
 
+        // Profile Button
         findViewById<ImageView>(R.id.ivProfileButton).setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
 
+        // Events Button
         findViewById<Button>(R.id.btnViewEvents).setOnClickListener {
             startActivity(Intent(this, EventsActivity::class.java))
         }
 
+        // Attendance Button
         findViewById<Button>(R.id.btnAttendance).setOnClickListener {
             startActivity(Intent(this, ParentAttendanceActivity::class.java))
         }
 
+        // Payments Button
         findViewById<Button>(R.id.btnPayments).setOnClickListener {
             startActivity(Intent(this, PaymentActivity::class.java))
         }

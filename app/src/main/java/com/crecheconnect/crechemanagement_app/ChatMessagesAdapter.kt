@@ -28,8 +28,8 @@ class ChatMessagesAdapter(
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val msg = messages[position]
-        holder.tvMessage.text = msg.message
-        holder.tvSender.text = msg.senderName
+        holder.tvMessage.text = msg.messageText
+        holder.tvSender.text = if (msg.senderId == currentUserId) "You" else "Other"
     }
 
     override fun getItemCount(): Int = messages.size

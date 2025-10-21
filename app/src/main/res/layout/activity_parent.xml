@@ -291,14 +291,7 @@
                         android:backgroundTint="#43A047"
                         android:textColor="#FFF" />
 
-                    <!-- Lunch -->
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:text="Lunch"
-                        android:backgroundTint="#FBC02D"
-                        android:textColor="#FFF" />
+
 
                     <!-- Messages -->
                     <Button

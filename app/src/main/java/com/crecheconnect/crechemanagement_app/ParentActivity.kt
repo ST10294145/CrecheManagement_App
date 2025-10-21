@@ -25,24 +25,19 @@ class ParentActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_parent)
 
-        // Firebase setup
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // Handle system bar insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // 🔹 Find the TextViews
         val tvChildName: TextView = findViewById(R.id.tvChildName)
         val tvChildAge: TextView = findViewById(R.id.tvChildAge)
         val tvChildAllergies: TextView = findViewById(R.id.tvChildAllergies)
 
-
-        // 🔹 Fetch the logged-in user’s info
         val uid = auth.currentUser?.uid
         if (uid != null) {
             db.collection("users").document(uid).get()
@@ -50,13 +45,7 @@ class ParentActivity : AppCompatActivity() {
                     if (document.exists()) {
                         val childName = document.getString("childName") ?: "N/A"
                         val dob = document.getString("childDob") ?: ""
-
-                        // Calculate age if DOB is available
-                        val ageText = if (dob.isNotEmpty()) {
-                            calculateAge(dob)
-                        } else {
-                            "Unknown"
-                        }
+                        val ageText = if (dob.isNotEmpty()) calculateAge(dob) else "Unknown"
                         val hasAllergies = document.getString("hasAllergies") ?: "No"
                         val allergyDetails = document.getString("allergyDetails") ?: ""
 
@@ -66,22 +55,19 @@ class ParentActivity : AppCompatActivity() {
                             "Allergies: None"
                         }
 
-
                         tvChildName.text = "Child's Name: $childName"
                         tvChildAge.text = "Age: $ageText"
                     } else {
                         Toast.makeText(this, "No user data found", Toast.LENGTH_SHORT).show()
                     }
-
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Failed to load child info", Toast.LENGTH_SHORT).show()
                 }
         }
 
-        // 🔹 Buttons (existing logic)
         findViewById<Button>(R.id.btnViewMessages).setOnClickListener {
-            startActivity(Intent(this, MessagesActivity::class.java))
+            startActivity(Intent(this, ChatMessagesActivity::class.java))
         }
 
         findViewById<ImageView>(R.id.ivProfileButton).setOnClickListener {
@@ -101,7 +87,6 @@ class ParentActivity : AppCompatActivity() {
         }
     }
 
-    // Helper to calculate age from date string (e.g. "2019-05-12")
     private fun calculateAge(dobString: String): String {
         return try {
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -111,9 +96,7 @@ class ParentActivity : AppCompatActivity() {
             birth.time = dob!!
 
             var age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR)
-            if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
-                age--
-            }
+            if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) age--
             age.toString()
         } catch (e: Exception) {
             "Unknown"

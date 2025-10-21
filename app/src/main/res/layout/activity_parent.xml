@@ -150,13 +150,6 @@
 
                     </LinearLayout>
                 </LinearLayout>
-            <!--
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="View Profile"
-                    android:backgroundTint="#FFB566"
-                    android:textColor="#000" /> -->
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -272,13 +265,14 @@
                         android:backgroundTint="#1D9CB3"
                         android:textColor="#FFF" />
 
-                    <!-- Media -->
+                    <!-- Messages -->
                     <Button
+                        android:id="@+id/btnMessages"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:text="Media"
-                        android:backgroundTint="#FF826F"
+                        android:text="Messages"
+                        android:backgroundTint="#1976D2"
                         android:textColor="#FFF" />
 
                     <!-- Payments -->
@@ -291,22 +285,19 @@
                         android:backgroundTint="#43A047"
                         android:textColor="#FFF" />
 
-
-
-
-
                     <!-- Attendance -->
                     <Button
                         android:id="@+id/btnAttendance"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:text="Attendace"
+                        android:text="Attendance"
                         android:backgroundTint="#006699"
                         android:textColor="#FFF" />
 
                 </GridLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 </ScrollView>

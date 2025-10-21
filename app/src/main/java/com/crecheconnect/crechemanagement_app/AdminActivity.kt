@@ -51,10 +51,9 @@ class AdminActivity : AppCompatActivity() {
         }
 
         btnAttendance.setOnClickListener {
-            startActivity(Intent(this, AttendanceActivity::class.java)) // Goes to attendance marking page
+            startActivity(Intent(this, AttendanceActivity::class.java))
         }
 
-        // UPDATED: Open new activity for viewing attendance
         btnCheckAttendance.setOnClickListener {
             startActivity(Intent(this, ViewAttendanceActivity::class.java))
         }
@@ -63,8 +62,9 @@ class AdminActivity : AppCompatActivity() {
             startActivity(Intent(this, EventsActivity::class.java))
         }
 
+        // Updated to use new chat system
         btnMessages.setOnClickListener {
-            startActivity(Intent(this, MessagesActivity::class.java))
+            startActivity(Intent(this, ChatMessagesActivity::class.java))
         }
 
         btnProfile.setOnClickListener {
@@ -98,7 +98,6 @@ class AdminActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Start time
             val startCalendar = Calendar.getInstance()
             startCalendar.set(
                 datePicker.year,
@@ -110,7 +109,6 @@ class AdminActivity : AppCompatActivity() {
             )
             val startTimestamp = startCalendar.timeInMillis
 
-            // End time
             val endCalendar = Calendar.getInstance()
             endCalendar.set(
                 datePicker.year,

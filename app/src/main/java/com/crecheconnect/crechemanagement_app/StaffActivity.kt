@@ -1,11 +1,13 @@
 package com.crecheconnect.crechemanagement_app
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import android.content.Intent
 import android.view.View
+import android.content.Intent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -14,32 +16,24 @@ class StaffActivity : AppCompatActivity() {
 
     private lateinit var btnAttendance: Button
     private lateinit var btnEvents: Button
-    private lateinit var btnMessages: Button
     private lateinit var btnCreateEvent: Button
     private lateinit var btnProfile: ImageView
 
-    private var currentUserRole: String = "staff" // Example: "staff" or "parent"
+    private var currentUserRole: String = "staff"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_staff)
 
-        // Initialize views
         btnProfile = findViewById(R.id.btnProfile)
         btnAttendance = findViewById(R.id.btnAttendance)
         btnEvents = findViewById(R.id.btnEvents)
-        btnMessages = findViewById(R.id.btnMessages)
         btnCreateEvent = findViewById(R.id.btnCreateEvent)
 
-        // Hide Create Event button for non-staff
-        if (currentUserRole != "staff") {
-            btnCreateEvent.visibility = View.GONE
-        }
+        if (currentUserRole != "staff") btnCreateEvent.visibility = View.GONE
 
-        // Button click listeners
         btnProfile.setOnClickListener { startActivity(Intent(this, ProfileActivity::class.java)) }
         btnAttendance.setOnClickListener { startActivity(Intent(this, AttendanceActivity::class.java)) }
-        btnMessages.setOnClickListener { startActivity(Intent(this, MessagesActivity::class.java)) }
         btnEvents.setOnClickListener { startActivity(Intent(this, EventsActivity::class.java)) }
         btnCreateEvent.setOnClickListener { showCreateEventDialog() }
     }
@@ -48,12 +42,12 @@ class StaffActivity : AppCompatActivity() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_create_event, null)
         val dialog = AlertDialog.Builder(this).setView(dialogView).create()
 
-        val inputTitle = dialogView.findViewById<EditText>(R.id.inputTitle)
-        val inputDescription = dialogView.findViewById<EditText>(R.id.inputDescription)
-        val inputLocation = dialogView.findViewById<EditText>(R.id.inputLocation) // New field
-        val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
-        val startTimePicker = dialogView.findViewById<TimePicker>(R.id.timePicker)
-        val endTimePicker = dialogView.findViewById<TimePicker>(R.id.timePickerEnd) // New field
+        val inputTitle = dialogView.findViewById<android.widget.EditText>(R.id.inputTitle)
+        val inputDescription = dialogView.findViewById<android.widget.EditText>(R.id.inputDescription)
+        val inputLocation = dialogView.findViewById<android.widget.EditText>(R.id.inputLocation)
+        val datePicker = dialogView.findViewById<android.widget.DatePicker>(R.id.datePicker)
+        val startTimePicker = dialogView.findViewById<android.widget.TimePicker>(R.id.timePicker)
+        val endTimePicker = dialogView.findViewById<android.widget.TimePicker>(R.id.timePickerEnd)
         val btnCreate = dialogView.findViewById<Button>(R.id.btnCreate)
 
         btnCreate.setOnClickListener {
@@ -66,7 +60,6 @@ class StaffActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Start timestamp
             val startCalendar = Calendar.getInstance()
             startCalendar.set(
                 datePicker.year,
@@ -78,7 +71,6 @@ class StaffActivity : AppCompatActivity() {
             )
             val startTimestamp = startCalendar.timeInMillis
 
-            // End timestamp
             val endCalendar = Calendar.getInstance()
             endCalendar.set(
                 datePicker.year,

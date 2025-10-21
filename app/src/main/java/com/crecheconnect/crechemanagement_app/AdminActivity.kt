@@ -62,7 +62,7 @@ class AdminActivity : AppCompatActivity() {
             startActivity(Intent(this, EventsActivity::class.java))
         }
 
-        // Updated to use new chat system
+        // Messages button navigates to ChatMessagesActivity
         btnMessages.setOnClickListener {
             startActivity(Intent(this, ChatMessagesActivity::class.java))
         }

@@ -52,7 +52,7 @@
         <activity android:name=".AdminEventsActivity" android:exported="false" />
 
         <!-- Messages -->
-        <activity android:name=".MessagesActivity" android:exported="false" />
+        <activity android:name=".ChatMessagesActivity" android:exported="false" />
 
     </application>
 

@@ -62,9 +62,10 @@ class AdminActivity : AppCompatActivity() {
             startActivity(Intent(this, EventsActivity::class.java))
         }
 
-        // Messages button navigates to ChatMessagesActivity
+        // Messages button opens ParentListActivity
         btnMessages.setOnClickListener {
-            startActivity(Intent(this, ChatMessagesActivity::class.java))
+            val intent = Intent(this, ParentListActivity::class.java)
+            startActivity(intent)
         }
 
         btnProfile.setOnClickListener {

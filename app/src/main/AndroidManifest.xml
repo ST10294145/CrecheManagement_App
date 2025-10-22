@@ -53,6 +53,7 @@
 
         <!-- Messages -->
         <activity android:name=".ChatMessagesActivity" android:exported="false" />
+        <activity android:name=".ParentListActivity" />
 
     </application>
 

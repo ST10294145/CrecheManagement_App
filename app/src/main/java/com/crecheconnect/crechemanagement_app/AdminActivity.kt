@@ -62,7 +62,7 @@ class AdminActivity : AppCompatActivity() {
             startActivity(Intent(this, EventsActivity::class.java))
         }
 
-        // Messages button opens ParentListActivity
+        // ✅ Messages button opens ParentListActivity
         btnMessages.setOnClickListener {
             val intent = Intent(this, ParentListActivity::class.java)
             startActivity(intent)

@@ -52,8 +52,8 @@
         <activity android:name=".AdminEventsActivity" android:exported="false" />
 
         <!-- Messages -->
-
-        <activity android:name=".ParentListActivity" />
+        <activity android:name=".ParentListActivity" android:exported="false" />
+        <activity android:name=".ChatActivity" android:exported="false" />
 
     </application>
 

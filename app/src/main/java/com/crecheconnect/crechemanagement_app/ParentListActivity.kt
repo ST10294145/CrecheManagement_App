@@ -6,13 +6,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.*
 
 class ParentListActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ParentListAdapter
     private val parentList = mutableListOf<User>()
+
+    private val db = FirebaseDatabase.getInstance(
+        "https://crechemanagement-app-default-rtdb.europe-west1.firebasedatabase.app"
+    ).reference
+    private val chatRepo = ChatRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,41 +27,44 @@ class ParentListActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         adapter = ParentListAdapter(parentList) { parent ->
-            val chatRepo = ChatRepository()
+            if (parent.uid.isEmpty()) {
+                Toast.makeText(this, "Invalid parent ID", Toast.LENGTH_SHORT).show()
+                return@ParentListAdapter
+            }
+
             chatRepo.createOrGetChat(parent.uid) { chatId ->
-                val intent = Intent(this, ChatMessagesActivity::class.java)
-                intent.putExtra("chatId", chatId)
-                startActivity(intent)
+                if (chatId.isNotEmpty()) {
+                    val intent = Intent(this, ChatMessagesActivity::class.java)
+                    intent.putExtra("chatId", chatId)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Failed to open chat", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+
         recyclerView.adapter = adapter
 
-        // Fetch all parents from Firestore
-        FirebaseFirestore.getInstance().collection("users")
-            .whereEqualTo("role", "parent")
-            .get()
-            .addOnSuccessListener { result ->
-                parentList.clear()
-                for (doc in result) {
-                    val user = User(
-                        uid = doc.id,
-                        email = doc.getString("email") ?: "",
-                        role = doc.getString("role") ?: "parent",
-                        parentName = doc.getString("parentName") ?: "",
-                        phoneNumber = doc.getString("phoneNumber") ?: "",
-                        address = doc.getString("address") ?: "",
-                        childName = doc.getString("childName") ?: "",
-                        childDob = doc.getString("childDob") ?: "",
-                        childGender = doc.getString("childGender") ?: "",
-                        hasAllergies = doc.getString("hasAllergies") ?: "",
-                        allergyDetails = doc.getString("allergyDetails") ?: ""
-                    )
-                    parentList.add(user)
+        loadParentsRealtime()
+    }
+
+    private fun loadParentsRealtime() {
+        db.child("users").orderByChild("role").equalTo("parent")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    parentList.clear()
+                    for (parentSnapshot in snapshot.children) {
+                        val user = parentSnapshot.getValue(User::class.java)
+                        if (user != null) {
+                            parentList.add(user)
+                        }
+                    }
+                    adapter.notifyDataSetChanged()
                 }
-                adapter.notifyDataSetChanged()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to load parents", Toast.LENGTH_SHORT).show()
-            }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@ParentListActivity, "Failed to load parents", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 }

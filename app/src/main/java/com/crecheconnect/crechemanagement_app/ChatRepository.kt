@@ -6,7 +6,10 @@ import java.util.*
 
 class ChatRepository {
 
-    private val database = FirebaseDatabase.getInstance().reference
+    // Explicitly use your Realtime Database URL
+    private val database = FirebaseDatabase.getInstance(
+        "https://crechemanagement-app-default-rtdb.europe-west1.firebasedatabase.app"
+    ).reference
     private val auth = FirebaseAuth.getInstance()
 
     // Create or get chat between admin and parent
@@ -14,11 +17,14 @@ class ChatRepository {
         val adminUid = auth.currentUser?.uid ?: return
         val chatRef = database.child("chats")
 
-        chatRef.orderByChild("participants").get().addOnSuccessListener { snapshot ->
+        chatRef.get().addOnSuccessListener { snapshot ->
             var chatIdFound: String? = null
+
+            // Check existing chats for the same participants
             for (child in snapshot.children) {
-                val participants = child.child("participants").getValue(List::class.java)
-                if (participants?.containsAll(listOf(adminUid, parentUid)) == true) {
+                val participantsMap = child.child("participants").value as? Map<*, *>
+                val participants = participantsMap?.values?.map { it.toString() } ?: emptyList()
+                if (participants.contains(adminUid) && participants.contains(parentUid) && participants.size == 2) {
                     chatIdFound = child.key
                     break
                 }
@@ -27,6 +33,7 @@ class ChatRepository {
             if (chatIdFound != null) {
                 onComplete(chatIdFound)
             } else {
+                // No chat exists, create a new one
                 val newChatId = chatRef.push().key ?: UUID.randomUUID().toString()
                 val chat = Chat(
                     chatId = newChatId,
@@ -36,37 +43,49 @@ class ChatRepository {
                 )
                 chatRef.child(newChatId).setValue(chat).addOnSuccessListener {
                     onComplete(newChatId)
+                }.addOnFailureListener {
+                    onComplete("")
                 }
             }
+        }.addOnFailureListener {
+            onComplete("") // return empty string if failed
         }
     }
 
-    // Send a message
+    // Send a message (atomic update)
     fun sendMessage(chatId: String, messageText: String) {
         val senderUid = auth.currentUser?.uid ?: return
         val participantsRef = database.child("chats").child(chatId).child("participants")
+
         participantsRef.get().addOnSuccessListener { snapshot ->
-            val participants = snapshot.value as? List<*>
-            val receiverUid = participants?.firstOrNull { it != senderUid } as? String ?: return@addOnSuccessListener
+            val participants = snapshot.value as? Map<*, *>
+            val participantList = participants?.values?.map { it.toString() } ?: emptyList()
+            val receiverUid = participantList.firstOrNull { it != senderUid } ?: return@addOnSuccessListener
 
             val messageId = database.child("chats").child(chatId).child("messages").push().key
                 ?: UUID.randomUUID().toString()
 
+            val timestamp = System.currentTimeMillis()
             val message = ChatMessage(
                 messageId = messageId,
                 senderId = senderUid,
                 receiverId = receiverUid,
                 messageText = messageText,
-                timestamp = System.currentTimeMillis()
+                timestamp = timestamp
             )
 
-            database.child("chats").child(chatId).child("messages").child(messageId).setValue(message)
-            database.child("chats").child(chatId).child("lastMessage").setValue(messageText)
-            database.child("chats").child(chatId).child("lastTimestamp").setValue(System.currentTimeMillis())
+            // Atomic update: message + lastMessage + lastTimestamp
+            val updates = hashMapOf<String, Any>(
+                "/chats/$chatId/messages/$messageId" to message,
+                "/chats/$chatId/lastMessage" to messageText,
+                "/chats/$chatId/lastTimestamp" to timestamp
+            )
+
+            database.updateChildren(updates)
         }
     }
 
-    // Listen to messages
+    // Listen to messages in real-time
     fun listenMessages(chatId: String, onMessageReceived: (ChatMessage) -> Unit) {
         val messagesRef = database.child("chats").child(chatId).child("messages")
         messagesRef.addChildEventListener(object : com.google.firebase.database.ChildEventListener {

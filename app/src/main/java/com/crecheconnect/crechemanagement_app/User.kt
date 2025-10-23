@@ -15,6 +15,8 @@ data class User(
     val childDob: String = "",
     val childGender: String = "",
     val hasAllergies: String = "",
-    val allergyDetails: String = ""
+    val allergyDetails: String = "",
 
+    // Document ID from Firestore (set programmatically, not stored in Firestore)
+    var documentId: String = ""
 )

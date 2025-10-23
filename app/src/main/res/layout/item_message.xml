@@ -2,15 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    android:orientation="vertical"
+    android:paddingVertical="4dp"
+    android:paddingHorizontal="8dp">
 
     <TextView
-        android:id="@+id/txtMessage"
+        android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:padding="10dp"
         android:background="@drawable/bg_message_received"
-        android:textSize="16sp" />
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:maxWidth="75dp"
+        android:layout_gravity="start" />
+
 </LinearLayout>

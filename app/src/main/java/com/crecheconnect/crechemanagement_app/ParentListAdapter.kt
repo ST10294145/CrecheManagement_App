@@ -7,28 +7,29 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ParentListAdapter(
-    private val parents: List<User>,
-    private val onParentClick: (User) -> Unit
-) : RecyclerView.Adapter<ParentListAdapter.ParentViewHolder>() {
+    private val users: List<User>, // renamed from parents to users
+    private val onUserClick: (User) -> Unit
+) : RecyclerView.Adapter<ParentListAdapter.UserViewHolder>() {
 
-    inner class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvParentName: TextView = itemView.findViewById(R.id.tvParentName)
+    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvUserName: TextView = itemView.findViewById(R.id.tvParentName)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_parent, parent, false)
-        return ParentViewHolder(view)
+        return UserViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ParentViewHolder, position: Int) {
-        val parent = parents[position]
-        holder.tvParentName.text = parent.parentName.ifEmpty { parent.email }
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+        val user = users[position]
+        // Display name if available, otherwise email
+        holder.tvUserName.text = user.parentName.ifEmpty { user.email }
 
         holder.itemView.setOnClickListener {
-            onParentClick(parent)
+            onUserClick(user)
         }
     }
 
-    override fun getItemCount(): Int = parents.size
+    override fun getItemCount(): Int = users.size
 }

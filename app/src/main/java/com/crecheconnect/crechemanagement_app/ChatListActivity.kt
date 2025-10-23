@@ -11,9 +11,9 @@ import com.google.firebase.database.*
 
 class ChatListActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewChats: RecyclerView
     private lateinit var chatListAdapter: ChatListAdapter
-    private val chatList = mutableListOf<String>() // chat IDs
+    private val chatList = mutableListOf<String>()
 
     private val db = FirebaseDatabase.getInstance(
         "https://crechemanagement-app-default-rtdb.europe-west1.firebasedatabase.app"
@@ -24,16 +24,16 @@ class ChatListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
 
-        recyclerView = findViewById(R.id.recyclerViewChats)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerViewChats = findViewById(R.id.recyclerViewChats)
+        recyclerViewChats.layoutManager = LinearLayoutManager(this)
 
         chatListAdapter = ChatListAdapter(chatList) { chatId ->
-            val intent = Intent(this, ChatMessagesActivity::class.java)
-            intent.putExtra("chatId", chatId)
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra("receiverId", chatId)
             startActivity(intent)
         }
 
-        recyclerView.adapter = chatListAdapter
+        recyclerViewChats.adapter = chatListAdapter
 
         loadChatsRealtime()
     }
@@ -46,7 +46,9 @@ class ChatListActivity : AppCompatActivity() {
                 for (chatSnapshot in snapshot.children) {
                     val participants = chatSnapshot.child("participants").children.map { it.value.toString() }
                     if (participants.contains(userId)) {
-                        chatList.add(chatSnapshot.key ?: "")
+                        // Get the other participant's UID
+                        val otherId = participants.first { it != userId }
+                        chatList.add(otherId)
                     }
                 }
                 chatListAdapter.notifyDataSetChanged()

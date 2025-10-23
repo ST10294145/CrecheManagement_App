@@ -66,9 +66,11 @@ class ParentActivity : AppCompatActivity() {
                 }
         }
 
-        // Messages Button
+        // Messages Button -> Parent only chats with Admin
         findViewById<Button>(R.id.btnMessages).setOnClickListener {
-            startActivity(Intent(this, ChatMessagesActivity::class.java))
+            val intent = Intent(this, ParentListActivity::class.java)
+            intent.putExtra("roleFilter", "admin") // Only admins show for parent
+            startActivity(intent)
         }
 
         // Profile Button

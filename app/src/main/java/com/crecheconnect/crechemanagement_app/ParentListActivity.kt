@@ -6,65 +6,62 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 class ParentListActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ParentListAdapter
-    private val parentList = mutableListOf<User>()
+    private lateinit var recyclerViewUsers: RecyclerView
+    private lateinit var userListAdapter: ParentListAdapter
+    private val userList = mutableListOf<User>() // Your User model
 
-    private val db = FirebaseDatabase.getInstance(
-        "https://crechemanagement-app-default-rtdb.europe-west1.firebasedatabase.app"
-    ).reference
-    private val chatRepo = ChatRepository()
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+    private var listenerRegistration: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parent_list)
 
-        recyclerView = findViewById(R.id.recyclerViewParents)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerViewUsers = findViewById(R.id.recyclerViewParents)
+        recyclerViewUsers.layoutManager = LinearLayoutManager(this)
 
-        adapter = ParentListAdapter(parentList) { parent ->
-            if (parent.uid.isEmpty()) {
-                Toast.makeText(this, "Invalid parent ID", Toast.LENGTH_SHORT).show()
-                return@ParentListAdapter
-            }
-
-            chatRepo.createOrGetChat(parent.uid) { chatId ->
-                if (chatId.isNotEmpty()) {
-                    val intent = Intent(this, ChatMessagesActivity::class.java)
-                    intent.putExtra("chatId", chatId)
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, "Failed to open chat", Toast.LENGTH_SHORT).show()
-                }
-            }
+        userListAdapter = ParentListAdapter(userList) { user ->
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra("receiverId", user.uid)
+            startActivity(intent)
         }
 
-        recyclerView.adapter = adapter
+        recyclerViewUsers.adapter = userListAdapter
 
-        loadParentsRealtime()
+        // Determine which role to load (admin for parents, parent for admin)
+        val roleFilter = intent.getStringExtra("roleFilter") ?: "parent"
+        loadUsersByRole(roleFilter)
     }
 
-    private fun loadParentsRealtime() {
-        db.child("users").orderByChild("role").equalTo("parent")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    parentList.clear()
-                    for (parentSnapshot in snapshot.children) {
-                        val user = parentSnapshot.getValue(User::class.java)
-                        if (user != null) {
-                            parentList.add(user)
-                        }
-                    }
-                    adapter.notifyDataSetChanged()
+    private fun loadUsersByRole(role: String) {
+        listenerRegistration = db.collection("users")
+            .whereEqualTo("role", role)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Toast.makeText(this, "Failed to load users", Toast.LENGTH_SHORT).show()
+                    return@addSnapshotListener
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@ParentListActivity, "Failed to load parents", Toast.LENGTH_SHORT).show()
+                if (snapshot != null) {
+                    userList.clear()
+                    for (doc in snapshot.documents) {
+                        val user = doc.toObject(User::class.java)
+                        user?.let { userList.add(it) }
+                    }
+                    userListAdapter.notifyDataSetChanged()
                 }
-            })
+            }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        listenerRegistration?.remove()
     }
 }

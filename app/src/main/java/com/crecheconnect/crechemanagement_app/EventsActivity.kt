@@ -14,13 +14,15 @@ class EventsActivity : AppCompatActivity() {
     private lateinit var eventAdapter: EventAdapter
     private val eventList = mutableListOf<Event>()
 
+    private var currentUserRole: String = "parent" // Change to "admin" for admin
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_events)
 
         recyclerView = findViewById(R.id.recyclerViewEvents)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        eventAdapter = EventAdapter(eventList, "parent")
+        eventAdapter = EventAdapter(eventList, currentUserRole)
         recyclerView.adapter = eventAdapter
 
         fetchEvents()

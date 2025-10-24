@@ -4,7 +4,8 @@
     android:padding="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FAEBD7">
+    android:background="#FAEBD7"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,39 +35,49 @@
             android:minHeight="48dp"
             android:layout_marginTop="8dp" />
 
+        <!-- Start Time Label -->
         <TextView
+            android:id="@+id/textDateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start Time"
             android:textStyle="bold"
-            android:layout_marginTop="12dp" />
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:layout_marginTop="12dp"
+            android:paddingBottom="4dp"/>
 
+        <!-- Start Pickers with extra margin -->
         <DatePicker
             android:id="@+id/datePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="8dp"/>
 
         <TimePicker
             android:id="@+id/timePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:timePickerMode="spinner"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="8dp"/>
 
+        <!-- End Time Label -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="End Time"
             android:textStyle="bold"
-            android:layout_marginTop="12dp" />
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:layout_marginTop="12dp"
+            android:paddingBottom="4dp"/>
 
         <TimePicker
             android:id="@+id/timePickerEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:timePickerMode="spinner"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="8dp"/>
 
         <Button
             android:id="@+id/btnCreate"

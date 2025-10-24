@@ -1,5 +1,6 @@
 package com.crecheconnect.crechemanagement_app
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.provider.CalendarContract
 import android.view.LayoutInflater
@@ -7,19 +8,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventAdapter(private val events: List<Event>) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
+class EventAdapter(
+    private val events: MutableList<Event>,
+    private val userRole: String // 👈 Added parameter
+) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
     class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.textTitle)
         val description: TextView = itemView.findViewById(R.id.textDescription)
         val dateTime: TextView = itemView.findViewById(R.id.textDateTime)
-        val endTime: TextView = itemView.findViewById(R.id.textEndTime)   // new field
-        val location: TextView = itemView.findViewById(R.id.textLocation) // new field
+        val endTime: TextView = itemView.findViewById(R.id.textEndTime)
+        val location: TextView = itemView.findViewById(R.id.textLocation)
         val btnAddToCalendar: Button = itemView.findViewById(R.id.btnAddToCalendar)
+        val btnDeleteEvent: Button = itemView.findViewById(R.id.btnDeleteEvent) // 👈 new button
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -43,11 +50,42 @@ class EventAdapter(private val events: List<Event>) : RecyclerView.Adapter<Event
                 data = CalendarContract.Events.CONTENT_URI
                 putExtra(CalendarContract.Events.TITLE, event.title)
                 putExtra(CalendarContract.Events.DESCRIPTION, event.description)
-                putExtra(CalendarContract.Events.EVENT_LOCATION, event.location) // include location
+                putExtra(CalendarContract.Events.EVENT_LOCATION, event.location)
                 putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.dateTime)
                 putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.endTime)
             }
             it.context.startActivity(intent)
+        }
+
+        // 🔹 Show Delete button only if Admin
+        if (userRole == "admin") {
+            holder.btnDeleteEvent.visibility = View.VISIBLE
+        } else {
+            holder.btnDeleteEvent.visibility = View.GONE
+        }
+
+        // 🔹 Handle Delete button click
+        holder.btnDeleteEvent.setOnClickListener {
+            val context = holder.itemView.context
+            AlertDialog.Builder(context)
+                .setTitle("Delete Event")
+                .setMessage("Are you sure you want to delete this event?")
+                .setPositiveButton("Yes") { _, _ ->
+                    val db = FirebaseFirestore.getInstance()
+                    db.collection("events").document(event.id)
+                        .delete()
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Event deleted", Toast.LENGTH_SHORT).show()
+                            // Remove event from list and update
+                            events.removeAt(position)
+                            notifyItemRemoved(position)
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
         }
     }
 

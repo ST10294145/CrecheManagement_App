@@ -20,7 +20,7 @@ class EventsActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewEvents)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        eventAdapter = EventAdapter(eventList)
+        eventAdapter = EventAdapter(eventList, "parent")
         recyclerView.adapter = eventAdapter
 
         fetchEvents()

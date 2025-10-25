@@ -40,7 +40,6 @@ class RegisterActivity : AppCompatActivity() {
 
         // Role sections
         val parentSection: LinearLayout = findViewById(R.id.parentSection)
-        val staffSection: LinearLayout = findViewById(R.id.staffSection)
         val adminSection: LinearLayout = findViewById(R.id.adminSection)
 
         // Parent fields
@@ -70,7 +69,6 @@ class RegisterActivity : AppCompatActivity() {
                 id: Long
             ) {
                 parentSection.visibility = View.GONE
-                staffSection.visibility = View.GONE
                 adminSection.visibility = View.GONE
 
                 selectedRole = when (position) {
@@ -78,13 +76,9 @@ class RegisterActivity : AppCompatActivity() {
                         parentSection.visibility = View.VISIBLE
                         "parent"
                     }
-                    1 -> {
-                        staffSection.visibility = View.VISIBLE
-                        "staff"
-                    }
                     else -> {
                         adminSection.visibility = View.VISIBLE
-                        "admin"
+                        "staff"
                     }
                 }
             }

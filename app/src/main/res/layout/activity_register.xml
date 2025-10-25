@@ -145,7 +145,7 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-            <!-- Staff Section -->
+            <!-- Staff Section
             <LinearLayout
                 android:id="@+id/staffSection"
                 android:layout_width="match_parent"
@@ -181,7 +181,7 @@
                     android:inputType="phone"
                     android:layout_marginTop="4dp"
                     android:background="@android:drawable/edit_text" />
-            </LinearLayout>
+            </LinearLayout> -->
 
             <!-- Admin Section -->
             <LinearLayout

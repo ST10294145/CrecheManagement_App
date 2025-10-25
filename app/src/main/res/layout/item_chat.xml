@@ -6,4 +6,4 @@
     android:padding="16dp"
     android:textSize="18sp"
     android:textColor="#000000"
-    android:background="?android:attr/selectableItemBackground" />
+    android:background="@color/background_light"/>

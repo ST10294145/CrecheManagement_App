@@ -62,7 +62,7 @@ class AdminActivity : AppCompatActivity() {
             startActivity(Intent(this, AdminEventsActivity::class.java))
         }
 
-        // ✅ Messages button opens Firestore-ready ParentListActivity
+        // Messages button opens Firestore-ready ParentListActivity
         btnMessages.setOnClickListener {
             startActivity(Intent(this, ParentListActivity::class.java))
         }

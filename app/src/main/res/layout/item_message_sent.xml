@@ -18,7 +18,11 @@
         android:paddingHorizontal="14dp"
         android:paddingVertical="10dp"
         android:layout_margin="4dp"
-        android:lineSpacingExtra="2dp" />
+        android:lineSpacingExtra="2dp"
+        android:maxWidth="280dp"
+        android:scrollHorizontally="false"
+        android:ellipsize="none"
+        android:breakStrategy="simple" />
 </LinearLayout>
 
- <!-- Message sent by you -->
+    <!-- Message you send when texting -->

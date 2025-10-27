@@ -105,17 +105,12 @@
                     android:id="@+id/itemNameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Item Name"
+                    android:hint="Payment Name"
                     android:background="@android:drawable/edit_text"
                     android:padding="10dp"
                     android:layout_marginBottom="6dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Due: Oct 15, 2025"
-                    android:textSize="12sp"
-                    android:textColor="#7F8C8D"/>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

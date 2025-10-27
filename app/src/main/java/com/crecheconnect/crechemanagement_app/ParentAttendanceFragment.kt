@@ -24,7 +24,8 @@ class ParentAttendanceFragment : Fragment() {
     private val attendanceList = mutableListOf<Attendance>()
     private val db = FirebaseFirestore.getInstance()
 
-    private val subjects = listOf("Select Subject", "Math", "English", "Natural Science", "P.E.", "L.O.")
+    // When the parent is checking their child's attendance for a specific subject
+    private val subjects = listOf("Alphabets", "Nap Time", "Numbers", "Physical Education", "Story Time")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,7 +72,7 @@ class ParentAttendanceFragment : Fragment() {
                     val childName = result.documents[0].getString("childName")
 
                     if (!childName.isNullOrEmpty()) {
-                        // 🔹 Sorted query by date (oldest → newest)
+                        // Sorted query by date (oldest → newest)
                         db.collection("attendance")
                             .whereEqualTo("childName", childName)
                             .whereEqualTo("subject", subject)

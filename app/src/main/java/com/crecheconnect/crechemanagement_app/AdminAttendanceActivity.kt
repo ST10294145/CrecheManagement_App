@@ -16,7 +16,7 @@ class AdminAttendanceActivity : AppCompatActivity() {
     private lateinit var spinnerSubjects: Spinner
     private lateinit var btnSave: Button
     private val attendanceList = mutableListOf<Attendance>()
-    private val subjects = listOf("Natural Science", "P.E.", "L.O.", "Math", "English")
+    private val subjects = listOf("Alphabets", "Nap Time", "Numbers", "Physical Education", "Story Time")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -20,7 +20,8 @@ class ViewAttendanceActivity : AppCompatActivity() {
     private val attendanceList = mutableListOf<Attendance>()
     private val db = FirebaseFirestore.getInstance()
 
-    private val subjects = listOf("Select Subject", "Math", "English", "Natural Science", "P.E.", "L.O.")
+    // The drop down menu for the admin check attendance
+    private val subjects = listOf("Alphabets", "Nap Time", "Numbers", "Physical Education", "Story Time")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

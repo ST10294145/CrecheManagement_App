@@ -45,8 +45,9 @@ class AdminAttendanceFragment : Fragment() {
         return view
     }
 
+    // When the admin is checking the attendance of all children for a specific subject
     private fun setupSubjectDropdown() {
-        val subjects = listOf("All Subjects", "Math", "English", "Natural Science", "P.E.", "L.O.")
+        val subjects = listOf("Alphabets", "Nap Time", "Numbers", "Physical Education", "Story Time")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, subjects)
         subjectDropdown.setAdapter(adapter)
     }

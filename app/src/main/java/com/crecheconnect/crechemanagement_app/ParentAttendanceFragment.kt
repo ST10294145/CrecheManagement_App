@@ -25,7 +25,7 @@ class ParentAttendanceFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
 
     // When the parent is checking their child's attendance for a specific subject
-    private val subjects = listOf("Alphabets", "Nap Time", "Numbers", "Physical Education", "Story Time")
+    private val subjects = listOf("Alphabets", "Nap Time", "Numbers", "Physical Education", "Story Time", "Writing")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

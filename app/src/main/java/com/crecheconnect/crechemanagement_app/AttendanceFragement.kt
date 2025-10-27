@@ -66,7 +66,7 @@ class AttendanceFragment : Fragment() {
     // Sets up the dropdown list of subjects
     private fun setupSubjectDropdown() {
         // Static list of subjects displayed in the dropdown
-        val subjects = listOf("Alphabets", "Nap Time", "Numbers", "Physical Education", "Story Time")
+        val subjects = listOf("Alphabets", "Nap Time", "Numbers", "Physical Education", "Story Time", "Writing")
         // Adapter to connect the list to the dropdown view
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, subjects)
         subjectDropdown.setAdapter(adapter)

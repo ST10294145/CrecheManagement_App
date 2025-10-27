@@ -264,14 +264,7 @@
                 android:textColor="#FFFFFF"
                 android:layout_marginTop="20dp" />
 
-            <!-- Already have an account -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Have an account already? Log in"
-                android:layout_marginTop="12dp"
-                android:layout_gravity="center"
-                android:textColor="#000" />
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

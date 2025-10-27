@@ -5,11 +5,33 @@
     android:layout_height="match_parent"
     android:background="@color/background_light">
 
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FF8C69"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:elevation="4dp">
+
+
+        <TextView
+            android:id="@+id/tvChatWith"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chatting with: Parent Name"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
     <!-- Messages RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMessages"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
         android:layout_above="@+id/inputLayout"
         android:clipToPadding="false"
         android:paddingTop="8dp"
@@ -51,7 +73,7 @@
             android:background="@drawable/send_button_background"
             android:contentDescription="Send"
             android:src="@android:drawable/ic_menu_send"
-            app:tint="@color/colorBlack" />
+            app:tint="@color/primary_blue" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var recyclerViewMessages: RecyclerView
     private lateinit var inputMessage: EditText
     private lateinit var btnSendMessage: ImageButton
+    private lateinit var tvChatWith: TextView  // ← NEW: Top bar text
     private lateinit var adapter: MessageAdapter
 
     private val messages = mutableListOf<Message>()
@@ -42,6 +44,7 @@ class ChatActivity : AppCompatActivity() {
         recyclerViewMessages = findViewById(R.id.recyclerViewMessages)
         inputMessage = findViewById(R.id.inputMessage)
         btnSendMessage = findViewById(R.id.btnSendMessage)
+        tvChatWith = findViewById(R.id.tvChatWith)  // ← NEW: Initialize the TextView
 
         adapter = MessageAdapter(messages)
         recyclerViewMessages.layoutManager = LinearLayoutManager(this)
@@ -72,7 +75,8 @@ class ChatActivity : AppCompatActivity() {
         Log.d(TAG, "Generated Chat ID: $chatId")
         Log.d(TAG, "Receiver Name: $receiverName")
 
-        supportActionBar?.title = receiverName ?: "Chat"
+        // NEW: Set the name in the top bar
+        tvChatWith.text = "Chatting with: ${receiverName ?: "User"}"
 
         listenForMessages()
 

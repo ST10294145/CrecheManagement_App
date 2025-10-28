@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
         <!-- HEADER -->
         <LinearLayout
@@ -19,11 +19,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="24dp">
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/app_icon"
                 android:contentDescription="App Icon" />
 
@@ -32,106 +32,50 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Creche Management"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="12dp"
                 android:textColor="@color/primary_blue" />
 
             <ImageView
                 android:id="@+id/btnProfile"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/profile_pic2"
                 android:contentDescription="Profile Picture"
                 android:scaleType="centerCrop"
                 android:background="@drawable/circle_shape" />
-
         </LinearLayout>
 
         <!-- WELCOME CARD -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp">
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Welcome, Admin!"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Here’s your dashboard overview tailored just for you."
+                    android:layout_marginTop="8dp"
+                    android:text="Here's your dashboard overview tailored just for you."
                     android:textColor="@color/dark_grey"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- MY OVERVIEW CARD -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/profile_pic2"
-                    android:scaleType="centerCrop"
-                    android:background="@drawable/circle_shape"
-                    android:contentDescription="Staff Photo" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Joanne Smith"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Room: Sunshine"
-                        android:textSize="14sp"
-                        android:textColor="@color/dark_grey" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Students: 12"
-                        android:textSize="14sp"
-                        android:textColor="@color/dark_grey" />
-                </LinearLayout>
-
+                    android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -140,96 +84,127 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Quick Links"
                     android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textColor="@color/black"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="16dp" />
 
-                <GridLayout
+                <!-- Row 1 -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="2"
-                    android:rowCount="3"
-                    android:alignmentMode="alignMargins"
-                    android:rowOrderPreserved="false"
-                    android:useDefaultMargins="true">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
 
-                    <!-- Registration -->
                     <Button
                         android:id="@+id/btnRegistration"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
+                        android:layout_height="64dp"
+                        android:layout_weight="1"
                         android:text="Registration"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:backgroundTint="@color/primary_blue"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="8dp"
+                        android:padding="8dp" />
 
-                    <!-- Mark Attendance -->
                     <Button
                         android:id="@+id/btnAttendance"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
+                        android:layout_height="64dp"
+                        android:layout_weight="1"
                         android:text="Mark Attendance"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:backgroundTint="#F4511E"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:layout_marginStart="8dp"
+                        android:padding="8dp" />
+                </LinearLayout>
 
-                    <!-- Check Attendance -->
+                <!-- Row 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
                     <Button
                         android:id="@+id/btnCheckAttendance"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
+                        android:layout_height="64dp"
+                        android:layout_weight="1"
                         android:text="Check Attendance"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:backgroundTint="#FF9800"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="8dp"
+                        android:padding="8dp" />
 
-                    <!-- Events -->
                     <Button
                         android:id="@+id/btnEvents"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:backgroundTint="#388E3C"
+                        android:layout_height="64dp"
+                        android:layout_weight="1"
                         android:text="Events"
-                        android:textColor="@color/white" />
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:backgroundTint="#388E3C"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="8dp"
+                        android:padding="8dp" />
+                </LinearLayout>
 
-                    <!-- Create Event -->
+                <!-- Row 3 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12px">
+
                     <Button
                         android:id="@+id/btnCreateEvent"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
+                        android:layout_height="64dp"
+                        android:layout_weight="1"
                         android:text="Create Event"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:backgroundTint="#800080"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="8dp"
+                        android:padding="8dp" />
 
-                    <!-- Messages -->
                     <Button
                         android:id="@+id/btnMessages"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
+                        android:layout_height="64dp"
+                        android:layout_weight="1"
                         android:text="Messages"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:backgroundTint="#1976D2"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:layout_marginStart="8dp"
+                        android:padding="8dp" />
+                </LinearLayout>
 
-                </GridLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
     </LinearLayout>
 </ScrollView>

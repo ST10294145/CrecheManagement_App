@@ -67,20 +67,7 @@
                 android:orientation="vertical"
                 android:padding="12dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Monthly Tuition"
-                    android:textStyle="bold"
-                    android:textSize="15sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="October 2025"
-                    android:textColor="#7F8C8D"
-                    android:textSize="13sp"
-                    android:layout_marginBottom="8dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -105,7 +92,7 @@
                     android:id="@+id/itemNameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Payment Name"
+                    android:hint="Payment Reference"
                     android:background="@android:drawable/edit_text"
                     android:padding="10dp"
                     android:layout_marginBottom="6dp"/>

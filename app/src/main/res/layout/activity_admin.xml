@@ -24,8 +24,8 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/logo"
-                android:contentDescription="App Logo" />
+                android:src="@drawable/app_icon"
+                android:contentDescription="App Icon" />
 
             <TextView
                 android:layout_width="0dp"
@@ -131,6 +131,7 @@
                         android:textSize="14sp"
                         android:textColor="@color/dark_grey" />
                 </LinearLayout>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

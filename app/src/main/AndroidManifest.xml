@@ -19,6 +19,15 @@
         android:theme="@style/Theme.CrecheManagement_App"
         tools:targetApi="31">
 
+        <!-- Register activities -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+        </activity>
+
+
         <!-- Payment activities -->
         <activity android:name=".PaymentActivity" />
         <activity android:name=".PayfastWebViewActivity" />
@@ -33,7 +42,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" android:exported="false" />
-        <activity android:name=".RegisterActivity" android:exported="false" />
+
 
         <!-- Admin and Staff -->
         <activity android:name=".AdminActivity" android:exported="false" />

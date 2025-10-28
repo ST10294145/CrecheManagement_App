@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF5E6"
-    tools:context=".RegisterActivity"
-    android:id="@+id/main">
+    android:fitsSystemWindows="true"
+    tools:context=".RegisterActivity">
 
     <ScrollView
         android:layout_width="0dp"
@@ -20,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:paddingBottom="100dp">
 
             <!-- Logo -->
             <ImageView
@@ -145,44 +147,6 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-            <!-- Staff Section
-            <LinearLayout
-                android:id="@+id/staffSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Staff Information"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"
-                    android:textColor="#000" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Full Name"
-                    android:background="@android:drawable/edit_text" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Role"
-                    android:layout_marginTop="4dp"
-                    android:background="@android:drawable/edit_text" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Phone Number"
-                    android:inputType="phone"
-                    android:layout_marginTop="4dp"
-                    android:background="@android:drawable/edit_text" />
-            </LinearLayout> -->
-
             <!-- Admin Section -->
             <LinearLayout
                 android:id="@+id/adminSection"
@@ -216,7 +180,7 @@
                     android:background="@android:drawable/edit_text" />
             </LinearLayout>
 
-            <!-- Common Fields (Email & Password for all roles) -->
+            <!-- Common Fields -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -253,7 +217,6 @@
                 android:drawableEnd="@android:drawable/ic_lock_lock"
                 android:background="@android:drawable/edit_text" />
 
-            <!-- Sign Up Button -->
             <Button
                 android:id="@+id/signUpButton"
                 android:layout_width="match_parent"
@@ -263,7 +226,6 @@
                 android:backgroundTint="#0097A7"
                 android:textColor="#FFFFFF"
                 android:layout_marginTop="20dp" />
-
 
         </LinearLayout>
     </ScrollView>

@@ -114,10 +114,23 @@ class MessageAdapter(
     class SentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val txtMessage: TextView = itemView.findViewById(R.id.txtMessage)
         private val txtTime: TextView = itemView.findViewById(R.id.txtTime)
+        private val txtReadStatus: TextView = itemView.findViewById(R.id.txtReadStatus)
 
         fun bind(message: Message) {
             txtMessage.text = message.message
             txtTime.text = formatTime(message.timestamp)
+
+            // Show read status with checkmarks
+            if (message.isRead) {
+                txtReadStatus.text = "✓✓"  // Double checkmark for read
+                txtReadStatus.setTextColor(0xFF2196F3.toInt())  // Blue color
+            } else if (message.deliveredAt > 0) {
+                txtReadStatus.text = "✓✓"  // Double checkmark for delivered
+                txtReadStatus.setTextColor(0xFF666666.toInt())  // Gray color
+            } else {
+                txtReadStatus.text = "✓"   // Single checkmark for sent
+                txtReadStatus.setTextColor(0xFF666666.toInt())  // Gray color
+            }
         }
     }
 

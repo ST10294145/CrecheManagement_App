@@ -134,24 +134,52 @@ class ChatActivity : AppCompatActivity() {
 
                 if (snapshot != null) {
                     messages.clear()
+                    val currentUserId = auth.currentUser?.uid
+
                     for (doc in snapshot.documents) {
-                        doc.toObject(Message::class.java)?.let {
-                            messages.add(it)
-                            Log.d(TAG, "Loaded message: ${it.message} from ${it.senderId}")
+                        doc.toObject(Message::class.java)?.let { message ->
+                            messages.add(message)
+                            Log.d(TAG, "Loaded message: ${message.message} from ${message.senderId}")
+
+                            // ✨ NEW: Mark message as read if it's from the other person and not already read
+                            if (message.receiverId == currentUserId && !message.isRead) {
+                                markMessageAsRead(doc.id)
+                            }
                         }
                     }
 
-                    // CHANGED: Use updateMessages() instead of notifyDataSetChanged()
-                    // This processes date headers automatically
+                    // Update adapter with new messages (includes date headers)
                     adapter.updateMessages()
 
                     if (messages.isNotEmpty()) {
-                        // CHANGED: Scroll to adapter.itemCount (includes date headers)
+                        // Scroll to adapter.itemCount (includes date headers)
                         recyclerViewMessages.scrollToPosition(adapter.itemCount - 1)
                     }
 
                     Log.d(TAG, "Total messages loaded: ${messages.size}")
                 }
+            }
+    }
+
+    /**
+     * Mark a message as read in Firestore
+     */
+    private fun markMessageAsRead(messageId: String) {
+        db.collection("chats")
+            .document(chatId)
+            .collection("messages")
+            .document(messageId)
+            .update(
+                mapOf(
+                    "isRead" to true,
+                    "deliveredAt" to System.currentTimeMillis()
+                )
+            )
+            .addOnSuccessListener {
+                Log.d(TAG, "Message marked as read: $messageId")
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Failed to mark message as read", e)
             }
     }
 }

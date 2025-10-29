@@ -18,7 +18,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var recyclerViewMessages: RecyclerView
     private lateinit var inputMessage: EditText
     private lateinit var btnSendMessage: ImageButton
-    private lateinit var tvChatWith: TextView  // ← NEW: Top bar text
+    private lateinit var tvChatWith: TextView
     private lateinit var adapter: MessageAdapter
 
     private val messages = mutableListOf<Message>()
@@ -44,7 +44,7 @@ class ChatActivity : AppCompatActivity() {
         recyclerViewMessages = findViewById(R.id.recyclerViewMessages)
         inputMessage = findViewById(R.id.inputMessage)
         btnSendMessage = findViewById(R.id.btnSendMessage)
-        tvChatWith = findViewById(R.id.tvChatWith)  // ← NEW: Initialize the TextView
+        tvChatWith = findViewById(R.id.tvChatWith)
 
         adapter = MessageAdapter(messages)
         recyclerViewMessages.layoutManager = LinearLayoutManager(this)
@@ -75,7 +75,7 @@ class ChatActivity : AppCompatActivity() {
         Log.d(TAG, "Generated Chat ID: $chatId")
         Log.d(TAG, "Receiver Name: $receiverName")
 
-        // NEW: Set the name in the top bar
+        // Set the name in the top bar
         tvChatWith.text = "Chatting with: ${receiverName ?: "User"}"
 
         listenForMessages()
@@ -140,10 +140,14 @@ class ChatActivity : AppCompatActivity() {
                             Log.d(TAG, "Loaded message: ${it.message} from ${it.senderId}")
                         }
                     }
-                    adapter.notifyDataSetChanged()
+
+                    // CHANGED: Use updateMessages() instead of notifyDataSetChanged()
+                    // This processes date headers automatically
+                    adapter.updateMessages()
 
                     if (messages.isNotEmpty()) {
-                        recyclerViewMessages.scrollToPosition(messages.size - 1)
+                        // CHANGED: Scroll to adapter.itemCount (includes date headers)
+                        recyclerViewMessages.scrollToPosition(adapter.itemCount - 1)
                     }
 
                     Log.d(TAG, "Total messages loaded: ${messages.size}")

@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="start"
-    android:paddingHorizontal="8dp"
-    android:paddingVertical="4dp"
-    android:background="@color/background_light">
+    android:padding="4dp">
 
-    <TextView
-        android:id="@+id/txtMessage"
+    <!-- item_message_recieved.xml - THEIR messages (left side) -->
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="60dp"
         android:background="@drawable/bg_message_received"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        android:paddingHorizontal="14dp"
-        android:paddingVertical="10dp"
-        android:layout_margin="4dp"
-        android:lineSpacingExtra="2dp"
-        android:maxWidth="280dp"
-        android:scrollHorizontally="false"
-        android:ellipsize="none"
-        android:breakStrategy="simple" />
-</LinearLayout>
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-<!-- Message you receive when texting -->
+        <TextView
+            android:id="@+id/txtMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Their message here"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="4dp"
+            android:text="14:30"
+            android:textColor="#666666"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+</FrameLayout>

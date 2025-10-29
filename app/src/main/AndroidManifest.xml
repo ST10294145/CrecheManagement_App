@@ -67,7 +67,10 @@
 
         <!-- Messages -->
         <activity android:name=".ParentListActivity" android:exported="false" />
-        <activity android:name=".ChatActivity" android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
     </application>
 

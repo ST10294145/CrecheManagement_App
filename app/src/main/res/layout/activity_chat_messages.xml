@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light">
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
 
     <!-- Top Bar -->
     <LinearLayout
@@ -14,7 +15,6 @@
         android:gravity="center_vertical"
         android:paddingHorizontal="16dp"
         android:elevation="4dp">
-
 
         <TextView
             android:id="@+id/tvChatWith"
@@ -36,7 +36,11 @@
         android:clipToPadding="false"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:scrollbars="vertical" />
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:scrollbars="vertical"
+        android:transcriptMode="alwaysScroll"
+        android:stackFromBottom="true" />
 
     <!-- Input Layout at Bottom -->
     <LinearLayout
@@ -63,7 +67,9 @@
             android:padding="12dp"
             android:textColor="@color/colorBlack"
             android:textColorHint="#999999"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:imeOptions="actionSend"
+            android:scrollbars="vertical" />
 
         <ImageButton
             android:id="@+id/btnSendMessage"

@@ -94,16 +94,39 @@ class ParentActivity : AppCompatActivity() {
         }
     }
 
+    // ✅ Fixed Age Calculation — works correctly for dd-MM-yyyy input like 03-11-2004
     private fun calculateAge(dobString: String): String {
+        if (dobString.isBlank()) return "Unknown"
+
+        // Try multiple possible date formats
+        val formats = listOf("dd-MM-yyyy", "yyyy-MM-dd", "dd/MM/yyyy", "MM-dd-yyyy", "yyyy/MM/dd")
+
+        var parsedDate: Date? = null
+        for (fmt in formats) {
+            try {
+                val sdf = SimpleDateFormat(fmt, Locale.getDefault())
+                sdf.isLenient = false
+                parsedDate = sdf.parse(dobString)
+                if (parsedDate != null) break
+            } catch (e: Exception) {
+                // ignore and try next
+            }
+        }
+
+        if (parsedDate == null) return "Unknown"
+
         return try {
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val dob = sdf.parse(dobString)
             val today = Calendar.getInstance()
             val birth = Calendar.getInstance()
-            birth.time = dob!!
+            birth.time = parsedDate
 
             var age = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR)
-            if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) age--
+
+            // Subtract one year if the birthday hasn't occurred yet this year
+            if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
+                age--
+            }
+
             age.toString()
         } catch (e: Exception) {
             "Unknown"

@@ -109,7 +109,7 @@
                     android:id="@+id/childDob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Date of Birth"
+                    android:hint="DD-MM-YYYY"
                     android:inputType="date"
                     android:layout_marginTop="4dp"
                     android:background="@android:drawable/edit_text" />
@@ -221,7 +221,7 @@
                 android:id="@+id/signUpButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign up"
+                android:text="Create"
                 android:textAllCaps="false"
                 android:backgroundTint="#0097A7"
                 android:textColor="#FFFFFF"

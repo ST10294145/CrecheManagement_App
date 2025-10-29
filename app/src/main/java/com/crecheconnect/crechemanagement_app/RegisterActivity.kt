@@ -2,6 +2,8 @@ package com.crecheconnect.crechemanagement_app
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
@@ -52,11 +54,9 @@ class RegisterActivity : AppCompatActivity() {
         val allergySpinner: Spinner = findViewById(R.id.allergySpinner)
         val allergyDetails: EditText = findViewById(R.id.allergyDetails)
 
-        // Admin Fields
         // Admin fields
         val adminName: EditText = findViewById(R.id.adminFullName)
         val adminPhone: EditText = findViewById(R.id.adminPhoneNumber)
-
 
         var selectedRole = "parent"
 
@@ -100,6 +100,59 @@ class RegisterActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
+        // Automatically insert dashes in childDob (DD-MM-YYYY)
+        childDob.addTextChangedListener(object : TextWatcher {
+            private var current = ""
+            private val ddmmyyyy = "DDMMYYYY"
+            private val cal = java.util.Calendar.getInstance()
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString() != current) {
+                    var clean = s.toString().replace("[^\\d.]|\\.".toRegex(), "")
+                    val cleanC = current.replace("[^\\d.]|\\.".toRegex(), "")
+
+                    val cl = clean.length
+                    var sel = cl
+                    for (i in 2..cl step 2) {
+                        sel++
+                    }
+                    if (clean == cleanC) sel--
+
+                    if (clean.length < 8) {
+                        clean += ddmmyyyy.substring(clean.length)
+                    } else {
+                        var day = clean.substring(0, 2).toInt()
+                        var mon = clean.substring(2, 4).toInt()
+                        var year = clean.substring(4, 8).toInt()
+
+                        if (mon > 12) mon = 12
+                        cal.set(java.util.Calendar.MONTH, mon - 1)
+                        year = if (year < 1900) 1900 else if (year > 2100) 2100 else year
+                        cal.set(java.util.Calendar.YEAR, year)
+                        day = if (day > cal.getActualMaximum(java.util.Calendar.DATE))
+                            cal.getActualMaximum(java.util.Calendar.DATE)
+                        else day
+                        clean = String.format("%02d%02d%04d", day, mon, year)
+                    }
+
+                    clean = String.format(
+                        "%s-%s-%s",
+                        clean.substring(0, 2),
+                        clean.substring(2, 4),
+                        clean.substring(4, 8)
+                    )
+
+                    sel = if (sel < 0) 0 else sel
+                    current = clean
+                    childDob.setText(current)
+                    childDob.setSelection(if (sel < current.length) sel else current.length)
+                }
+            }
+        })
+
         // Handle registration
         signUpButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
@@ -112,7 +165,7 @@ class RegisterActivity : AppCompatActivity() {
 
             val currentAdmin = auth.currentUser  // Save admin session
 
-            // ✅ Create a SECONDARY FirebaseAuth instance to register new user
+            // Create a SECONDARY FirebaseAuth instance to register new user
             val secondaryAuth = FirebaseAuth.getInstance(FirebaseApp.getInstance())
 
             secondaryAuth.createUserWithEmailAndPassword(email, password)
@@ -151,7 +204,6 @@ class RegisterActivity : AppCompatActivity() {
                             userData.putAll(adminData)
                         }
 
-
                         // Save to Firestore
                         db.collection("users").document(uid).set(userData)
                             .addOnSuccessListener {
@@ -161,7 +213,7 @@ class RegisterActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
 
-                                // ✅ Re-authenticate admin after registering the user
+                                // Re-authenticate admin after registering the user
                                 secondaryAuth.signOut()
                                 if (currentAdmin != null) {
                                     auth.updateCurrentUser(currentAdmin)

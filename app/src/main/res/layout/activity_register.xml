@@ -208,14 +208,30 @@
                 android:layout_marginBottom="4dp"
                 android:textColor="#000" />
 
-            <EditText
-                android:id="@+id/passwordInput"
+            <!-- Password Field with Eye Icon -->
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="********"
-                android:inputType="textPassword"
-                android:drawableEnd="@android:drawable/ic_lock_lock"
-                android:background="@android:drawable/edit_text" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/passwordInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="********"
+                    android:inputType="textPassword"
+                    android:paddingEnd="48dp"
+                    android:background="@android:drawable/edit_text" />
+
+                <ImageView
+                    android:id="@+id/togglePassword"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="8dp"
+                    android:src="@drawable/eye"
+                    android:contentDescription="Toggle Password Visibility" />
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/signUpButton"

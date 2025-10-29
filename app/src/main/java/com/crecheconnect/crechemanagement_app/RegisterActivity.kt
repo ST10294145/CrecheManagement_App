@@ -3,6 +3,7 @@ package com.crecheconnect.crechemanagement_app
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
 import android.widget.*
@@ -39,6 +40,7 @@ class RegisterActivity : AppCompatActivity() {
         val passwordInput: EditText = findViewById(R.id.passwordInput)
         val signUpButton: Button = findViewById(R.id.signUpButton)
         val roleSpinner: Spinner = findViewById(R.id.roleSpinner)
+        val togglePassword: ImageView = findViewById(R.id.togglePassword)
 
         // Role sections
         val parentSection: LinearLayout = findViewById(R.id.parentSection)
@@ -60,39 +62,27 @@ class RegisterActivity : AppCompatActivity() {
 
         var selectedRole = "parent"
 
-        // Handle role selection
+        // === Role selection ===
         roleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 parentSection.visibility = View.GONE
                 adminSection.visibility = View.GONE
 
-                selectedRole = when (position) {
-                    0 -> {
-                        parentSection.visibility = View.VISIBLE
-                        "parent"
-                    }
-                    else -> {
-                        adminSection.visibility = View.VISIBLE
-                        "staff"
-                    }
+                selectedRole = if (position == 0) {
+                    parentSection.visibility = View.VISIBLE
+                    "parent"
+                } else {
+                    adminSection.visibility = View.VISIBLE
+                    "staff"
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
+        // === Allergy selection ===
         allergySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selected = parent.getItemAtPosition(position).toString()
                 allergyDetails.visibility = if (selected == "Yes") View.VISIBLE else View.GONE
             }
@@ -100,10 +90,9 @@ class RegisterActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        // Automatically insert dashes in childDob (DD-MM-YYYY)
+        // === DOB automatic dash insertion (DD-MM-YYYY) ===
         childDob.addTextChangedListener(object : TextWatcher {
             private var current = ""
-            private val ddmmyyyy = "DDMMYYYY"
             private val cal = java.util.Calendar.getInstance()
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -111,49 +100,35 @@ class RegisterActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString() != current) {
-                    var clean = s.toString().replace("[^\\d.]|\\.".toRegex(), "")
-                    val cleanC = current.replace("[^\\d.]|\\.".toRegex(), "")
+                    var clean = s.toString().replace("[^\\d]".toRegex(), "")
+                    if (clean.length > 8) clean = clean.substring(0, 8)
 
-                    val cl = clean.length
-                    var sel = cl
-                    for (i in 2..cl step 2) {
-                        sel++
-                    }
-                    if (clean == cleanC) sel--
+                    val day = if (clean.length >= 2) clean.substring(0, 2) else clean
+                    val month = if (clean.length >= 4) clean.substring(2, 4) else ""
+                    val year = if (clean.length >= 5) clean.substring(4, 8) else ""
 
-                    if (clean.length < 8) {
-                        clean += ddmmyyyy.substring(clean.length)
-                    } else {
-                        var day = clean.substring(0, 2).toInt()
-                        var mon = clean.substring(2, 4).toInt()
-                        var year = clean.substring(4, 8).toInt()
-
-                        if (mon > 12) mon = 12
-                        cal.set(java.util.Calendar.MONTH, mon - 1)
-                        year = if (year < 1900) 1900 else if (year > 2100) 2100 else year
-                        cal.set(java.util.Calendar.YEAR, year)
-                        day = if (day > cal.getActualMaximum(java.util.Calendar.DATE))
-                            cal.getActualMaximum(java.util.Calendar.DATE)
-                        else day
-                        clean = String.format("%02d%02d%04d", day, mon, year)
-                    }
-
-                    clean = String.format(
-                        "%s-%s-%s",
-                        clean.substring(0, 2),
-                        clean.substring(2, 4),
-                        clean.substring(4, 8)
-                    )
-
-                    sel = if (sel < 0) 0 else sel
-                    current = clean
+                    current = day + (if (month.isNotEmpty()) "-$month" else "") + (if (year.isNotEmpty()) "-$year" else "")
                     childDob.setText(current)
-                    childDob.setSelection(if (sel < current.length) sel else current.length)
+                    childDob.setSelection(current.length)
                 }
             }
         })
 
-        // Handle registration
+        // === Password toggle ===
+        var isPasswordVisible = false
+        togglePassword.setOnClickListener {
+            if (isPasswordVisible) {
+                passwordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                togglePassword.setImageResource(R.drawable.eye)
+            } else {
+                passwordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                togglePassword.setImageResource(R.drawable.eye)
+            }
+            isPasswordVisible = !isPasswordVisible
+            passwordInput.setSelection(passwordInput.text.length)
+        }
+
+        // === Registration ===
         signUpButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()
@@ -163,9 +138,7 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val currentAdmin = auth.currentUser  // Save admin session
-
-            // Create a SECONDARY FirebaseAuth instance to register new user
+            val currentAdmin = auth.currentUser
             val secondaryAuth = FirebaseAuth.getInstance(FirebaseApp.getInstance())
 
             secondaryAuth.createUserWithEmailAndPassword(email, password)
@@ -174,14 +147,12 @@ class RegisterActivity : AppCompatActivity() {
                         val newUser = task.result?.user
                         val uid = newUser?.uid ?: ""
 
-                        // Base user info
                         val userData = hashMapOf(
                             "uid" to uid,
                             "email" to email,
                             "role" to selectedRole
                         )
 
-                        // Add parent info
                         if (selectedRole == "parent") {
                             val parentData = mapOf(
                                 "parentName" to parentName.text.toString().trim(),
@@ -198,40 +169,23 @@ class RegisterActivity : AppCompatActivity() {
 
                         if (selectedRole == "admin") {
                             val adminData = mapOf(
-                                "parentName" to adminName.text.toString().trim(),  // reuse same key for consistency
+                                "parentName" to adminName.text.toString().trim(),
                                 "phoneNumber" to adminPhone.text.toString().trim()
                             )
                             userData.putAll(adminData)
                         }
 
-                        // Save to Firestore
                         db.collection("users").document(uid).set(userData)
                             .addOnSuccessListener {
-                                Toast.makeText(
-                                    this,
-                                    "User registered successfully!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                                // Re-authenticate admin after registering the user
+                                Toast.makeText(this, "User registered successfully!", Toast.LENGTH_SHORT).show()
                                 secondaryAuth.signOut()
-                                if (currentAdmin != null) {
-                                    auth.updateCurrentUser(currentAdmin)
-                                }
+                                currentAdmin?.let { auth.updateCurrentUser(it) }
                             }
                             .addOnFailureListener {
-                                Toast.makeText(
-                                    this,
-                                    "Failed to save user data",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show()
                             }
                     } else {
-                        Toast.makeText(
-                            this,
-                            "Error: ${task.exception?.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
         }

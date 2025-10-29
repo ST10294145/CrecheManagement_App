@@ -114,7 +114,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         })
 
-        // === Password toggle ===
+        // Password eye toggle
         var isPasswordVisible = false
         togglePassword.setOnClickListener {
             if (isPasswordVisible) {
@@ -128,7 +128,7 @@ class RegisterActivity : AppCompatActivity() {
             passwordInput.setSelection(passwordInput.text.length)
         }
 
-        // === Registration ===
+        // Registration
         signUpButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()

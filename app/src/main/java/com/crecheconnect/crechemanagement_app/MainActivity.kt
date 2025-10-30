@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets // ✅ return insets properly here
+            insets // return insets properly here
         }
 
         val btnLogin: Button = findViewById(R.id.btnLogin)

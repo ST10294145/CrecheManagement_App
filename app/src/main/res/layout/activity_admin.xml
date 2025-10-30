@@ -1,41 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_light"
     android:fillViewport="true"
-    android:id="@+id/main">
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:paddingBottom="24dp">
 
         <!-- HEADER -->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
             android:layout_marginBottom="24dp">
 
             <ImageView
+                android:id="@+id/appIcon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@drawable/app_icon"
-                android:contentDescription="App Icon" />
+                android:contentDescription="App Icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Creche Management"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:textColor="@color/primary_blue"
                 android:layout_marginStart="12dp"
-                android:textColor="@color/primary_blue" />
+                app:layout_constraintStart_toEndOf="@id/appIcon"
+                app:layout_constraintEnd_toStartOf="@id/btnProfile"
+                app:layout_constraintTop_toTopOf="@id/appIcon"
+                app:layout_constraintBottom_toBottomOf="@id/appIcon"/>
 
             <ImageView
                 android:id="@+id/btnProfile"
@@ -44,8 +53,11 @@
                 android:src="@drawable/profile_pic2"
                 android:contentDescription="Profile Picture"
                 android:scaleType="centerCrop"
-                android:background="@drawable/circle_shape" />
-        </LinearLayout>
+                android:background="@drawable/circle_shape"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/appIcon"
+                app:layout_constraintBottom_toBottomOf="@id/appIcon"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- WELCOME CARD -->
         <androidx.cardview.widget.CardView
@@ -175,7 +187,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="12px">
+                    android:layout_marginBottom="12dp">
 
                     <Button
                         android:id="@+id/btnCreateEvent"

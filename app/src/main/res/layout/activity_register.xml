@@ -111,8 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="DD-MM-YYYY"
-                    android:inputType="datetime|number"
-                    android:digits="0123456789-"
+                    android:inputType="number"
                     android:layout_marginTop="4dp"
                     android:background="@android:drawable/edit_text" />
 

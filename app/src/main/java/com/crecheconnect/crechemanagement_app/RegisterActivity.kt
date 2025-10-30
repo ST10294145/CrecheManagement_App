@@ -35,18 +35,18 @@ class RegisterActivity : AppCompatActivity() {
             insets
         }
 
-        // Common fields
+        // === Common fields ===
         val emailInput: EditText = findViewById(R.id.emailInput)
         val passwordInput: EditText = findViewById(R.id.passwordInput)
         val signUpButton: Button = findViewById(R.id.signUpButton)
         val roleSpinner: Spinner = findViewById(R.id.roleSpinner)
         val togglePassword: ImageView = findViewById(R.id.togglePassword)
 
-        // Role sections
+        // === Role sections ===
         val parentSection: LinearLayout = findViewById(R.id.parentSection)
         val adminSection: LinearLayout = findViewById(R.id.adminSection)
 
-        // Parent fields
+        // === Parent fields ===
         val parentName: EditText = findViewById(R.id.parentName)
         val parentPhone: EditText = findViewById(R.id.PhoneNumber)
         val parentAddress: EditText = findViewById(R.id.homeAddress)
@@ -56,7 +56,7 @@ class RegisterActivity : AppCompatActivity() {
         val allergySpinner: Spinner = findViewById(R.id.allergySpinner)
         val allergyDetails: EditText = findViewById(R.id.allergyDetails)
 
-        // Admin fields
+        // === Admin fields ===
         val adminName: EditText = findViewById(R.id.adminFullName)
         val adminPhone: EditText = findViewById(R.id.adminPhoneNumber)
 
@@ -90,31 +90,49 @@ class RegisterActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        // === DOB automatic dash insertion (DD-MM-YYYY) ===
+        // === FIXED DOB TextWatcher (DD-MM-YYYY) ===
         childDob.addTextChangedListener(object : TextWatcher {
             private var current = ""
-            private val cal = java.util.Calendar.getInstance()
+            private val nonDigits = Regex("[^\\d]")
+            private val maxLength = 8
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                if (s.toString() != current) {
-                    var clean = s.toString().replace("[^\\d]".toRegex(), "")
-                    if (clean.length > 8) clean = clean.substring(0, 8)
+                if (s == null) return
+                val input = s.toString()
 
-                    val day = if (clean.length >= 2) clean.substring(0, 2) else clean
-                    val month = if (clean.length >= 4) clean.substring(2, 4) else ""
-                    val year = if (clean.length >= 5) clean.substring(4, 8) else ""
+                // Avoid infinite loop
+                if (input == current) return
 
-                    current = day + (if (month.isNotEmpty()) "-$month" else "") + (if (year.isNotEmpty()) "-$year" else "")
-                    childDob.setText(current)
-                    childDob.setSelection(current.length)
+                // Remove any non-digit characters
+                var clean = input.replace(nonDigits, "")
+
+                // Handle delete case
+                if (clean.length < current.replace(nonDigits, "").length) {
+                    current = clean
+                    return
                 }
+
+                // Limit input to 8 digits (DDMMYYYY)
+                if (clean.length > maxLength) clean = clean.substring(0, maxLength)
+
+                val formatted = StringBuilder()
+                for (i in clean.indices) {
+                    formatted.append(clean[i])
+                    if (i == 1 || i == 3) formatted.append("-")
+                }
+
+                current = formatted.toString()
+                childDob.removeTextChangedListener(this)
+                childDob.setText(current)
+                childDob.setSelection(current.length)
+                childDob.addTextChangedListener(this)
             }
         })
 
-        // Password eye toggle
+        // === Password eye toggle ===
         var isPasswordVisible = false
         togglePassword.setOnClickListener {
             if (isPasswordVisible) {
@@ -128,7 +146,7 @@ class RegisterActivity : AppCompatActivity() {
             passwordInput.setSelection(passwordInput.text.length)
         }
 
-        // Registration
+        // === Registration ===
         signUpButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()

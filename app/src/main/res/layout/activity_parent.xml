@@ -275,7 +275,7 @@
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
                         android:text="Events"
-                        android:backgroundTint="#1D9CB3"
+                        android:backgroundTint="#9D00FF"
                         android:textColor="#FFF" />
 
                     <!-- Messages -->
@@ -285,7 +285,7 @@
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
                         android:text="Messages"
-                        android:backgroundTint="#1976D2"
+                        android:backgroundTint="#FF8C69"
                         android:textColor="#FFF" />
 
                     <!-- Payments -->

@@ -14,32 +14,22 @@ class MessageAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
-
-    // List that includes both messages and date headers
     private val displayItems = mutableListOf<DisplayItem>()
 
     init {
         processMessagesWithDateHeaders()
     }
 
-    /**
-     * Process messages and insert date headers where needed
-     */
     private fun processMessagesWithDateHeaders() {
         displayItems.clear()
-
         var lastDate: String? = null
 
         messages.forEach { message ->
             val messageDate = getDateString(message.timestamp)
-
-            // If date changed, add a date header
             if (messageDate != lastDate) {
                 displayItems.add(DisplayItem.DateHeader(messageDate))
                 lastDate = messageDate
             }
-
-            // Add the message
             displayItems.add(DisplayItem.MessageItem(message))
         }
     }
@@ -47,70 +37,40 @@ class MessageAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (val item = displayItems[position]) {
             is DisplayItem.DateHeader -> VIEW_TYPE_DATE_HEADER
-            is DisplayItem.MessageItem -> {
-                if (item.message.senderId == currentUserId) {
-                    VIEW_TYPE_SENT
-                } else {
-                    VIEW_TYPE_RECEIVED
-                }
-            }
+            is DisplayItem.MessageItem -> if (item.message.senderId == currentUserId) VIEW_TYPE_SENT else VIEW_TYPE_RECEIVED
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_DATE_HEADER -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_date_header, parent, false)
-                DateHeaderViewHolder(view)
-            }
-            VIEW_TYPE_SENT -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_message_sent, parent, false)
-                SentMessageViewHolder(view)
-            }
-            else -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_message_received, parent, false)
-                ReceivedMessageViewHolder(view)
-            }
+            VIEW_TYPE_DATE_HEADER -> DateHeaderViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_date_header, parent, false))
+            VIEW_TYPE_SENT -> SentMessageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_message_sent, parent, false))
+            else -> ReceivedMessageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_message_received, parent, false))
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = displayItems[position]) {
-            is DisplayItem.DateHeader -> {
-                (holder as DateHeaderViewHolder).bind(item.date)
-            }
-            is DisplayItem.MessageItem -> {
-                when (holder) {
-                    is SentMessageViewHolder -> holder.bind(item.message)
-                    is ReceivedMessageViewHolder -> holder.bind(item.message)
-                }
+            is DisplayItem.DateHeader -> (holder as DateHeaderViewHolder).bind(item.date)
+            is DisplayItem.MessageItem -> when (holder) {
+                is SentMessageViewHolder -> holder.bind(item.message)
+                is ReceivedMessageViewHolder -> holder.bind(item.message)
             }
         }
     }
 
     override fun getItemCount(): Int = displayItems.size
 
-    /**
-     * Update messages and refresh date headers
-     */
     fun updateMessages() {
         processMessagesWithDateHeaders()
         notifyDataSetChanged()
     }
 
-    // ViewHolder for date headers
     class DateHeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val txtDate: TextView = itemView.findViewById(R.id.txtDate)
-
-        fun bind(date: String) {
-            txtDate.text = date
-        }
+        fun bind(date: String) { txtDate.text = date }
     }
 
-    // ViewHolder for sent messages
     class SentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val txtMessage: TextView = itemView.findViewById(R.id.txtMessage)
         private val txtTime: TextView = itemView.findViewById(R.id.txtTime)
@@ -120,21 +80,20 @@ class MessageAdapter(
             txtMessage.text = message.message
             txtTime.text = formatTime(message.timestamp)
 
-            // Show read status with checkmarks
-            if (message.isRead) {
-                txtReadStatus.text = "✓✓"  // Double checkmark for read
-                txtReadStatus.setTextColor(0xFF2196F3.toInt())  // Blue color
-            } else if (message.deliveredAt > 0) {
-                txtReadStatus.text = "✓✓"  // Double checkmark for delivered
-                txtReadStatus.setTextColor(0xFF666666.toInt())  // Gray color
-            } else {
-                txtReadStatus.text = "✓"   // Single checkmark for sent
-                txtReadStatus.setTextColor(0xFF666666.toInt())  // Gray color
+            txtReadStatus.text = when {
+                message.isRead -> "✓✓"
+                message.deliveredAt > 0 -> "✓✓"
+                else -> "✓"
             }
+            txtReadStatus.setTextColor(
+                when {
+                    message.isRead -> 0xFF2196F3.toInt()
+                    else -> 0xFF666666.toInt()
+                }
+            )
         }
     }
 
-    // ViewHolder for received messages
     class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val txtMessage: TextView = itemView.findViewById(R.id.txtMessage)
         private val txtTime: TextView = itemView.findViewById(R.id.txtTime)
@@ -145,9 +104,6 @@ class MessageAdapter(
         }
     }
 
-    /**
-     * Sealed class to represent either a message or date header
-     */
     sealed class DisplayItem {
         data class MessageItem(val message: Message) : DisplayItem()
         data class DateHeader(val date: String) : DisplayItem()
@@ -158,64 +114,28 @@ class MessageAdapter(
         private const val VIEW_TYPE_RECEIVED = 2
         private const val VIEW_TYPE_DATE_HEADER = 3
 
-        /**
-         * Format timestamp as time (e.g., "14:30")
-         */
-        private fun formatTime(timestamp: Long): String {
-            val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
-            return sdf.format(Date(timestamp))
-        }
+        private fun formatTime(timestamp: Long): String =
+            SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(timestamp))
 
-        /**
-         * Get date string with smart formatting:
-         * - Today
-         * - Yesterday
-         * - Day name (if within last week)
-         * - Full date (if older)
-         */
         private fun getDateString(timestamp: Long): String {
-            val messageDate = Calendar.getInstance().apply {
-                timeInMillis = timestamp
-            }
+            val messageDate = Calendar.getInstance().apply { timeInMillis = timestamp }
             val today = Calendar.getInstance()
-            val yesterday = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, -1)
-            }
+            val yesterday = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
 
             return when {
-                // Today
                 isSameDay(messageDate, today) -> "Today"
-
-                // Yesterday
                 isSameDay(messageDate, yesterday) -> "Yesterday"
-
-                // Within last 7 days - show day name
-                isWithinLastWeek(messageDate, today) -> {
-                    SimpleDateFormat("EEEE", Locale.getDefault()).format(messageDate.time)
-                }
-
-                // Older - show full date
-                else -> {
-                    SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(messageDate.time)
-                }
+                isWithinLastWeek(messageDate, today) -> SimpleDateFormat("EEEE", Locale.getDefault()).format(messageDate.time)
+                else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(messageDate.time)
             }
         }
 
-        /**
-         * Check if two dates are the same day
-         */
-        private fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
-            return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+        private fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean =
+            cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                     cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
-        }
 
-        /**
-         * Check if date is within last 7 days
-         */
         private fun isWithinLastWeek(messageDate: Calendar, today: Calendar): Boolean {
-            val weekAgo = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, -7)
-            }
+            val weekAgo = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -7) }
             return messageDate.after(weekAgo) && messageDate.before(today)
         }
     }

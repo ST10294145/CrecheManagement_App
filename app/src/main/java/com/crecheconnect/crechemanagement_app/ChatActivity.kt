@@ -64,18 +64,10 @@ class ChatActivity : AppCompatActivity() {
             return
         }
 
-        // CRITICAL: Generate chatId here to ensure consistency
-        // Don't rely on the passed chatId - always regenerate it
+        // Generate chatId
         chatId = getChatId(currentUserId, receiverId)
 
-        // Debug logging
-        Log.d(TAG, "=== CHAT INITIALIZED ===")
-        Log.d(TAG, "Current User ID: $currentUserId")
-        Log.d(TAG, "Receiver ID: $receiverId")
-        Log.d(TAG, "Generated Chat ID: $chatId")
-        Log.d(TAG, "Receiver Name: $receiverName")
-
-        // Set the name in the top bar
+        // Set chat title
         tvChatWith.text = "Chatting with: ${receiverName ?: "User"}"
 
         listenForMessages()
@@ -89,6 +81,7 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    // Send message as plain text (no Base64 encoding)
     private fun sendMessage(messageText: String) {
         val currentUserId = auth.currentUser?.uid ?: return
 
@@ -98,12 +91,6 @@ class ChatActivity : AppCompatActivity() {
             message = messageText,
             timestamp = System.currentTimeMillis()
         )
-
-        Log.d(TAG, "=== SENDING MESSAGE ===")
-        Log.d(TAG, "Chat ID: $chatId")
-        Log.d(TAG, "Message: $messageText")
-        Log.d(TAG, "From: $currentUserId")
-        Log.d(TAG, "To: $receiverId")
 
         db.collection("chats")
             .document(chatId)
@@ -118,19 +105,14 @@ class ChatActivity : AppCompatActivity() {
             }
     }
 
+    // Listen for new messages
     private fun listenForMessages() {
-        Log.d(TAG, "=== LISTENING FOR MESSAGES ===")
-        Log.d(TAG, "Chat ID: $chatId")
-
         db.collection("chats")
             .document(chatId)
             .collection("messages")
             .orderBy("timestamp", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    Log.e(TAG, "Error listening to messages", error)
-                    return@addSnapshotListener
-                }
+                if (error != null) return@addSnapshotListener
 
                 if (snapshot != null) {
                     messages.clear()
@@ -139,31 +121,20 @@ class ChatActivity : AppCompatActivity() {
                     for (doc in snapshot.documents) {
                         doc.toObject(Message::class.java)?.let { message ->
                             messages.add(message)
-                            Log.d(TAG, "Loaded message: ${message.message} from ${message.senderId}")
-
-                            // ✨ NEW: Mark message as read if it's from the other person and not already read
                             if (message.receiverId == currentUserId && !message.isRead) {
                                 markMessageAsRead(doc.id)
                             }
                         }
                     }
 
-                    // Update adapter with new messages (includes date headers)
                     adapter.updateMessages()
-
                     if (messages.isNotEmpty()) {
-                        // Scroll to adapter.itemCount (includes date headers)
                         recyclerViewMessages.scrollToPosition(adapter.itemCount - 1)
                     }
-
-                    Log.d(TAG, "Total messages loaded: ${messages.size}")
                 }
             }
     }
 
-    /**
-     * Mark a message as read in Firestore
-     */
     private fun markMessageAsRead(messageId: String) {
         db.collection("chats")
             .document(chatId)
@@ -175,11 +146,5 @@ class ChatActivity : AppCompatActivity() {
                     "deliveredAt" to System.currentTimeMillis()
                 )
             )
-            .addOnSuccessListener {
-                Log.d(TAG, "Message marked as read: $messageId")
-            }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "Failed to mark message as read", e)
-            }
     }
 }

@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ChatListAdapter(
-    private val chatList: List<String>,
+    private val chatList: List<ChatItem>,
     private val onClick: (String) -> Unit
 ) : RecyclerView.Adapter<ChatListAdapter.ChatViewHolder>() {
 
@@ -22,9 +22,9 @@ class ChatListAdapter(
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        val chatId = chatList[position]
-        holder.chatName.text = chatId
-        holder.itemView.setOnClickListener { onClick(chatId) }
+        val chat = chatList[position]
+        holder.chatName.text = chat.receiverName
+        holder.itemView.setOnClickListener { onClick(chat.receiverId) }
     }
 
     override fun getItemCount(): Int = chatList.size

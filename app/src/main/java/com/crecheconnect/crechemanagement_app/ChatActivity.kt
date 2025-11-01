@@ -32,7 +32,6 @@ class ChatActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "ChatActivity"
 
-        // Helper function to generate consistent chatId
         fun getChatId(uid1: String, uid2: String): String =
             if (uid1 < uid2) "$uid1-$uid2" else "$uid2-$uid1"
     }
@@ -50,25 +49,23 @@ class ChatActivity : AppCompatActivity() {
         recyclerViewMessages.layoutManager = LinearLayoutManager(this)
         recyclerViewMessages.adapter = adapter
 
-        // Get receiver info from intent
         receiverId = intent.getStringExtra("receiverId") ?: ""
-        receiverName = intent.getStringExtra("receiverName")
 
-        // Get current user
         val currentUserId = auth.currentUser?.uid
-
         if (currentUserId == null || receiverId.isEmpty()) {
             Toast.makeText(this, "Error: Invalid user data", Toast.LENGTH_SHORT).show()
-            Log.e(TAG, "Missing user IDs - currentUserId: $currentUserId, receiverId: $receiverId")
             finish()
             return
         }
 
-        // Generate chatId
         chatId = getChatId(currentUserId, receiverId)
 
-        // Set chat title
-        tvChatWith.text = "Chatting with: ${receiverName ?: "User"}"
+        // Fetch receiver name
+        db.collection("users").document(receiverId).get().addOnSuccessListener { doc ->
+            val user = doc.toObject(User::class.java)
+            receiverName = user?.parentName ?: "User"
+            tvChatWith.text = "Chatting with: $receiverName"
+        }
 
         listenForMessages()
 
@@ -81,10 +78,8 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    // Send message as plain text (no Base64 encoding)
     private fun sendMessage(messageText: String) {
         val currentUserId = auth.currentUser?.uid ?: return
-
         val message = Message(
             senderId = currentUserId,
             receiverId = receiverId,
@@ -97,7 +92,7 @@ class ChatActivity : AppCompatActivity() {
             .collection("messages")
             .add(message)
             .addOnSuccessListener { docRef ->
-                Log.d(TAG, "Message sent successfully: ${docRef.id}")
+                Log.d(TAG, "Message sent: ${docRef.id}")
             }
             .addOnFailureListener { e ->
                 Log.e(TAG, "Error sending message", e)
@@ -105,7 +100,6 @@ class ChatActivity : AppCompatActivity() {
             }
     }
 
-    // Listen for new messages
     private fun listenForMessages() {
         db.collection("chats")
             .document(chatId)
@@ -114,24 +108,19 @@ class ChatActivity : AppCompatActivity() {
             .addSnapshotListener { snapshot, error ->
                 if (error != null) return@addSnapshotListener
 
-                if (snapshot != null) {
-                    messages.clear()
-                    val currentUserId = auth.currentUser?.uid
+                messages.clear()
+                val currentUserId = auth.currentUser?.uid
 
-                    for (doc in snapshot.documents) {
-                        doc.toObject(Message::class.java)?.let { message ->
-                            messages.add(message)
-                            if (message.receiverId == currentUserId && !message.isRead) {
-                                markMessageAsRead(doc.id)
-                            }
+                snapshot?.documents?.forEach { doc ->
+                    doc.toObject(Message::class.java)?.let { message ->
+                        messages.add(message)
+                        if (message.receiverId == currentUserId && !message.isRead) {
+                            markMessageAsRead(doc.id)
                         }
                     }
-
-                    adapter.updateMessages()
-                    if (messages.isNotEmpty()) {
-                        recyclerViewMessages.scrollToPosition(adapter.itemCount - 1)
-                    }
                 }
+                adapter.updateMessages()
+                if (messages.isNotEmpty()) recyclerViewMessages.scrollToPosition(adapter.itemCount - 1)
             }
     }
 

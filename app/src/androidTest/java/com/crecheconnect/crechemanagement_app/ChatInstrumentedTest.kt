@@ -101,7 +101,8 @@ class ChatInstrumentedTest {
             Message(senderId = "user1", receiverId = "user2", message = "How are you?")
         )
 
-        val adapter = MessageAdapter(messages)
+        val adapter = MessageAdapter(messages, currentUserId = "user1")
+
 
         assertEquals("Adapter should have 3 items", 3, adapter.itemCount)
 

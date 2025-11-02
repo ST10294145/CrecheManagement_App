@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:padding="4dp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/txtMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -12,44 +13,9 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/bg_message_sent"
         android:elevation="2dp"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/txtMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Your message here"
-            android:textColor="@color/colorBlack"
-            android:textSize="16sp" />
-
-        <!-- Time and Read Status Row -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="4dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/txtTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="14:30"
-                android:textColor="#555555"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/txtReadStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="✓"
-                android:textColor="#666666"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </LinearLayout>
+        android:padding="12dp"
+        android:text="Your message"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp" />
 
 </FrameLayout>

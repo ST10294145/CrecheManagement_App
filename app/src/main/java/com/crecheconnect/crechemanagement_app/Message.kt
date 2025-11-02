@@ -1,11 +1,12 @@
 package com.crecheconnect.crechemanagement_app
 
+// Redid to make simplier and take out most features that were causing problems
 data class Message(
-    val id: String = "",
     val senderId: String = "",
     val receiverId: String = "",
     val message: String = "",
-    val timestamp: Long = System.currentTimeMillis(),
-    val isRead: Boolean = false,
-    val deliveredAt: Long = 0
-)
+    val timestamp: Long = 0
+) {
+    // Empty constructor for Firestore
+    constructor() : this("", "", "", 0)
+}

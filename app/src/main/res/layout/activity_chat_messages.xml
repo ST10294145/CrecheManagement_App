@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="#F5F5F5"
     android:fitsSystemWindows="true">
 
     <!-- Top Bar -->
@@ -20,7 +20,7 @@
             android:id="@+id/tvChatWith"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chatting with: Parent Name"
+            android:text="User Name"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -32,17 +32,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/topBar"
-        android:layout_above="@+id/inputLayout"
+        android:layout_above="@id/inputLayout"
         android:clipToPadding="false"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:scrollbars="vertical"
-        android:transcriptMode="alwaysScroll"
-        android:stackFromBottom="true" />
+        android:paddingBottom="8dp" />
 
-    <!-- Input Layout at Bottom -->
+    <!-- Input Layout -->
     <LinearLayout
         android:id="@+id/inputLayout"
         android:layout_width="match_parent"
@@ -65,11 +60,7 @@
             android:maxLines="4"
             android:minHeight="48dp"
             android:padding="12dp"
-            android:textColor="@color/colorBlack"
-            android:textColorHint="#999999"
-            android:textSize="16sp"
-            android:imeOptions="actionSend"
-            android:scrollbars="vertical" />
+            android:textSize="16sp" />
 
         <ImageButton
             android:id="@+id/btnSendMessage"
@@ -79,7 +70,7 @@
             android:background="@drawable/send_button_background"
             android:contentDescription="Send"
             android:src="@android:drawable/ic_menu_send"
-            app:tint="@color/primary_blue" />
+            app:tint="#FF7E70" />
     </LinearLayout>
 
 </RelativeLayout>

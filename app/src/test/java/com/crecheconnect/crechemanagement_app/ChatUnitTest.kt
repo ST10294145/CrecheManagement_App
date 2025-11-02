@@ -100,21 +100,18 @@ class ChatUnitTest {
     @Test
     fun message_hasAllRequiredFields() {
         val message = Message(
-            id = "test123",
             senderId = adminId,
             receiverId = parentId,
             message = "Test message",
             timestamp = System.currentTimeMillis()
         )
 
-        assertNotNull("Message should not be null", message)
-        assertEquals("SenderId should match", adminId, message.senderId)
-        assertEquals("ReceiverId should match", parentId, message.receiverId)
-        assertEquals("Message text should match", "Test message", message.message)
-        assertTrue("Timestamp should be positive", message.timestamp > 0)
-
-        println("Test Passed: Message object is valid")
+        assertEquals(adminId, message.senderId)
+        assertEquals(parentId, message.receiverId)
+        assertEquals("Test message", message.message)
+        assertTrue(message.timestamp > 0)
     }
+
 
     /**
      * Test 7: Empty message validation
@@ -123,13 +120,12 @@ class ChatUnitTest {
     fun message_canBeEmpty() {
         val emptyMessage = Message()
 
-        assertNotNull("Empty message should not be null", emptyMessage)
-        assertEquals("Default senderId should be empty", "", emptyMessage.senderId)
-        assertEquals("Default receiverId should be empty", "", emptyMessage.receiverId)
-        assertEquals("Default message should be empty", "", emptyMessage.message)
-
-        println("Test Passed: Empty message constructor works")
+        assertEquals("", emptyMessage.senderId)
+        assertEquals("", emptyMessage.receiverId)
+        assertEquals("", emptyMessage.message)
+        assertEquals(0, emptyMessage.timestamp)
     }
+
 
     /**
      * Test 8: User data class with documentId

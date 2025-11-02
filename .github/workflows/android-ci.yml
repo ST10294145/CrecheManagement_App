@@ -1,0 +1,67 @@
+name: Android CI
+
+# run on push and on PRs targeting main (adjust branch names if needed)
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build, Lint & Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      # Cache Gradle wrapper + Gradle build dependencies
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle.lockfile', '**/gradle-wrapper.properties', '**/build.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Print environment info
+        run: |
+          java -version
+          ./gradlew -v
+
+      - name: Run Lint
+        run: ./gradlew lint --no-daemon --stacktrace
+        continue-on-error: true    # let build continue even if lint finds issues (change to false to fail build)
+
+      - name: Run Unit Tests (JVM)
+        run: ./gradlew testDebugUnitTest --no-daemon --stacktrace
+
+      - name: Build (assemble debug)
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Upload debug APK artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk

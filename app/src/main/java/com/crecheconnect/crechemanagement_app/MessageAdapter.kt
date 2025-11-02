@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
  * SIMPLE Message Adapter
  * Just displays messages - no complex features
  */
-class SimpleMessageAdapter(
+class MessageAdapter(
     private val messages: List<Message>,
     private val currentUserId: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

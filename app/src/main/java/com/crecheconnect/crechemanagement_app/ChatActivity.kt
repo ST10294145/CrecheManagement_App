@@ -20,7 +20,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var inputMessage: EditText
     private lateinit var btnSendMessage: ImageButton
     private lateinit var tvChatWith: TextView
-    private lateinit var adapter: SimpleMessageAdapter
+    private lateinit var adapter: MessageAdapter
 
     private val messages = mutableListOf<Message>()
     private val db = FirebaseFirestore.getInstance()
@@ -52,7 +52,7 @@ class ChatActivity : AppCompatActivity() {
         tvChatWith = findViewById(R.id.tvChatWith)
 
         // Setup RecyclerView
-        adapter = SimpleMessageAdapter(messages, auth.currentUser?.uid ?: "")
+        adapter = MessageAdapter(messages, auth.currentUser?.uid ?: "")
         recyclerViewMessages.layoutManager = LinearLayoutManager(this)
         recyclerViewMessages.adapter = adapter
 

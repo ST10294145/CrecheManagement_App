@@ -1,4 +1,4 @@
-# 🧸 Creche Management System
+# 🧸 Creche Management App
 
 ## 📖 Overview
 The **Creche Management System** is an **Android application** designed to **digitize the traditional paper-based systems** used in creches and early childhood centers.  

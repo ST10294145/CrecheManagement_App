@@ -196,10 +196,9 @@ Stores PayFast payment records.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/creche-management-system.git
+git clone https://github.com/ST10294145/CrecheManagement_App.git
 
 # 2. Open the project in Android Studio
-cd creche-management-system
 
 # 3. Connect Firebase
 #   - Go to Tools > Firebase > Authentication and Firestore

@@ -212,17 +212,6 @@ cd creche-management-system
 #   - Select an Android device or emulator
 #   - Click Run ▶️ in Android Studio
 ```
-
----
-
-## 🧾 Benefits of Digitization
-
-✅ Eliminates paper records and manual errors  
-✅ Improves communication between staff and parents  
-✅ Enables instant access to records anytime, anywhere  
-✅ Provides secure and trackable digital payments  
-✅ Saves time, resources, and effort for administrators  
-
 ---
 
 ## 👨‍💻 Developers
